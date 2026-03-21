@@ -18,7 +18,10 @@ const i18n = {
         guideContent: '<p>Maintaining a consistent tempo during exercises like squats and push-ups is crucial for maximizing muscle growth and minimizing the risk of injury. <strong>FitBbeak</strong> helps you focus purely on your movement by providing precise auditory signals.</p><p>The science of "Time Under Tension" (TUT) shows that controlled repetitions lead to better neuromuscular adaptation. By setting your ideal interval with <strong>FitBbeak</strong>, you can ensure every rep counts.</p>',
         privacy: 'Privacy Policy',
         terms: 'Terms of Service',
-        support: 'Support (Toss Me)'
+        support: 'Support (Toss Me)',
+        unitSec: 'sec',
+        unitCount: 'count',
+        unitReps: 'reps'
     },
     ko: {
         brand: '핏삑',
@@ -39,7 +42,10 @@ const i18n = {
         guideContent: '<p>스쿼트와 푸시업 같은 운동에서 일정한 템포를 유지하는 것은 근성장을 극대화하고 부상 위험을 최소화하는 데 매우 중요합니다. <strong>핏삑</strong>은 정확한 청각 신호를 제공하여 오직 동작에만 집중할 수 있도록 돕습니다.</p><p>긴장 상태 유지 시간(TUT) 이론에 따르면 통제된 반복 동작은 더 나은 신경근 적응을 이끌어냅니다. <strong>핏삑</strong>으로 이상적인 간격을 설정하여 매 순간의 효율을 높여보세요.</p>',
         privacy: '개인정보 처리방침',
         terms: '이용약관',
-        support: '후원하기 (Toss Me)'
+        support: '후원하기 (Toss Me)',
+        unitSec: '초',
+        unitCount: '회',
+        unitReps: '개'
     },
     de: {
         brand: 'FitBbeak',
@@ -60,7 +66,10 @@ const i18n = {
         guideContent: '<p>Ein konstantes Tempo bei Übungen like squats and push-ups is crucial. <strong>FitBbeak</strong> helps you focus through precise acoustic signals.</p>',
         privacy: 'Datenschutz',
         terms: 'AGB',
-        support: 'Support (Toss Me)'
+        support: 'Support (Toss Me)',
+        unitSec: 'Sek',
+        unitCount: 'Zähl',
+        unitReps: 'Wdh'
     },
     es: {
         brand: 'FitBbeak',
@@ -81,7 +90,10 @@ const i18n = {
         guideContent: '<p>Mantener un ritmo constante ayuda a maximizar el crecimiento muscular. <strong>FitBbeak</strong> te ayuda con señales auditivas precisas.</p>',
         privacy: 'Privacidad',
         terms: 'Términos',
-        support: 'Apoyar (Toss Me)'
+        support: 'Apoyar (Toss Me)',
+        unitSec: 'seg',
+        unitCount: 'cont',
+        unitReps: 'reps'
     }
 };
 
@@ -433,6 +445,12 @@ function updateUI() {
     elements.linkTerms.innerText = data.terms;
     elements.linkSupport.innerText = data.support;
     elements.copyright.innerText = `© 2026 ${data.brand}. All rights reserved.`;
+
+    // New: Units
+    document.getElementById('unit-ready').innerText = data.unitSec;
+    document.getElementById('unit-interval').innerText = data.unitSec;
+    document.getElementById('unit-beeps').innerText = data.unitCount;
+    document.getElementById('unit-goal').innerText = data.unitReps;
 
     // Theme
     elements.body.className = state.theme === 'dark' ? 'dark-mode' : '';
