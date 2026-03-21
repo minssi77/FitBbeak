@@ -90,7 +90,7 @@ const i18n = {
  * Handles 3D rotation, snapping, and direct input mode.
  */
 class WheelPicker {
-    constructor(id, min, max, step, initialValue, onUpdate) {
+    constructor(id, min, max, step, initialValue, onUpdate, isLoop = true) {
         this.id = id;
         this.container = document.querySelector(`.number-control[data-target="${id}"] .wheel-picker`);
         this.scroller = this.container.querySelector('.wheel-scroller');
@@ -101,10 +101,11 @@ class WheelPicker {
         this.step = step;
         this.value = initialValue;
         this.onUpdate = onUpdate;
+        this.isLoop = isLoop;
+        this.cloneCount = 5;
         
         this.itemHeight = 30;
         this.items = [];
-        this.isDragging = false;
         this.startY = 0;
         this.startScrollY = 0;
         this.wheelTimeout = null;
@@ -122,14 +123,23 @@ class WheelPicker {
     generateItems() {
         this.scroller.innerHTML = '';
         this.items = [];
+        const values = [];
         for (let v = this.min; v <= this.max; v = parseFloat((v + this.step).toFixed(2))) {
+            values.push(v);
+        }
+
+        const renderValues = this.isLoop ? 
+            [...values.slice(-this.cloneCount), ...values, ...values.slice(0, this.cloneCount)] : 
+            values;
+
+        renderValues.forEach(v => {
             const item = document.createElement('div');
             item.className = 'wheel-item';
             item.innerText = v;
             item.dataset.value = v;
             this.scroller.appendChild(item);
             this.items.push(item);
-        }
+        });
     }
 
     render() {
@@ -140,8 +150,8 @@ class WheelPicker {
     }
 
     getScrollIndexByValue(val) {
-        const index = Math.round((val - this.min) / this.step);
-        return Math.max(0, Math.min(this.items.length - 1, index));
+        const baseIndex = Math.round((val - this.min) / this.step);
+        return this.isLoop ? baseIndex + this.cloneCount : baseIndex;
     }
 
     updateItemStyles() {
@@ -263,13 +273,29 @@ class WheelPicker {
         });
 
         const newValue = parseFloat(closestItem.dataset.value);
+        const itemIndex = this.items.indexOf(closestItem);
+
+        if (this.isLoop) {
+            if (itemIndex < this.cloneCount || itemIndex >= this.items.length - this.cloneCount) {
+                // Jump to original without animation for seamless loop
+                this.setValue(newValue, false);
+                return;
+            }
+        }
         this.setValue(newValue);
     }
 
-    setValue(val) {
-        val = Math.max(this.min, Math.min(this.max, parseFloat(val) || this.min));
+    setValue(val, animate = true) {
+        val = parseFloat(val) || this.min;
+        if (this.isLoop) {
+            if (val > this.max) val = this.min;
+            else if (val < this.min) val = this.max;
+        } else {
+            val = Math.max(this.min, Math.min(this.max, val));
+        }
+        
         this.value = val;
-        this.scrollToValue(val);
+        this.scrollToValue(val, animate);
         if (this.onUpdate) this.onUpdate(val);
     }
 }
@@ -322,16 +348,16 @@ function initPickers() {
         state.readyTime = val;
         localStorage.setItem('fitbbeak_readyTime', val);
     });
-    pickers.interval = new WheelPicker('interval', 0.1, 99.9, 0.1, state.interval, (val) => {
+    pickers.interval = new WheelPicker('interval', 0.1, 30.0, 0.1, state.interval, (val) => {
         state.interval = val;
         localStorage.setItem('fitbbeak_interval', val);
         if (state.isWorkoutRunning && !state.isPaused) restartWorkoutTimer();
     });
-    pickers.beepsPerRep = new WheelPicker('beepsPerRep', 1, 10, 1, state.beepsPerRep, (val) => {
+    pickers.beepsPerRep = new WheelPicker('beepsPerRep', 1, 20, 1, state.beepsPerRep, (val) => {
         state.beepsPerRep = val;
         localStorage.setItem('fitbbeak_beepsPerRep', val);
     });
-    pickers.maxReps = new WheelPicker('maxReps', 1, 999, 1, state.maxReps, (val) => {
+    pickers.maxReps = new WheelPicker('maxReps', 1, 1000, 1, state.maxReps, (val) => {
         state.maxReps = val;
         localStorage.setItem('fitbbeak_maxReps', val);
     });
