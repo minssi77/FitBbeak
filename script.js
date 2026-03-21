@@ -107,7 +107,8 @@ class WheelPicker {
         this.itemHeight = 30;
         this.items = [];
         this.startY = 0;
-        this.startScrollY = 0;
+        this.translateY = 0;
+        this.startTranslateY = 0;
         this.wheelTimeout = null;
 
         this.init();
@@ -152,41 +153,73 @@ class WheelPicker {
 
     render() {
         const centerOffset = (this.container.offsetHeight / 2) - (this.itemHeight / 2);
-        const scrollAmount = centerOffset - (this.getScrollIndexByValue(this.value) * this.itemHeight);
-        this.scroller.style.transform = `translateY(${scrollAmount}px)`;
+        this.translateY = centerOffset - (this.getScrollIndexByValue(this.value) * this.itemHeight);
+        this.scroller.style.transform = `translateY(${this.translateY}px)`;
         this.updateItemStyles();
     }
 
     getScrollIndexByValue(val) {
+        if (this.id === 'interval') {
+            const values = this.getIntervalValues();
+            const baseIndex = values.indexOf(val);
+            return this.isLoop ? baseIndex + this.cloneCount : baseIndex;
+        }
         const baseIndex = Math.round((val - this.min) / this.step);
         return this.isLoop ? baseIndex + this.cloneCount : baseIndex;
     }
 
+    getIntervalValues() {
+        let values = [];
+        for (let v = 0.1; v <= 0.8; v = parseFloat((v + 0.1).toFixed(2))) values.push(v);
+        for (let v = 0.81; v <= 1.49; v = parseFloat((v + 0.01).toFixed(2))) values.push(v);
+        for (let v = 1.5; v <= 1.9; v = parseFloat((v + 0.1).toFixed(2))) values.push(v);
+        return values;
+    }
+
     updateItemStyles() {
-        const centerLine = this.container.offsetHeight / 2;
-        this.items.forEach(item => {
-            const rect = item.getBoundingClientRect();
-            const containerRect = this.container.getBoundingClientRect();
-            const relativeCenter = rect.top + (rect.height / 2) - containerRect.top;
-            const diff = Math.abs(centerLine - relativeCenter);
+        const centerOffset = (this.container.offsetHeight / 2) - (this.itemHeight / 2);
+        const relativeScroll = -(this.translateY - centerOffset);
+        
+        this.items.forEach((item, index) => {
+            const itemPos = index * this.itemHeight;
+            const diff = Math.abs(relativeScroll - itemPos);
             
             item.classList.remove('active', 'nearby', 'far');
             
-            if (diff < 12) {
+            if (diff < this.itemHeight * 0.4) {
                 item.classList.add('active');
-            } else if (diff < 35) {
+            } else if (diff < this.itemHeight * 1.2) {
                 item.classList.add('nearby');
             } else {
                 item.classList.add('far');
             }
             
             // Dramatic 3D effect
-            const rotation = (relativeCenter - centerLine) / 35 * 65; // Max ~65deg
-            const scale = 1 - (diff / 120); // More dramatic scale
-            const z = (diff < 12) ? 15 : 0; // Pop active item forward
-            item.style.transform = `rotateX(${-rotation}deg) scale(${scale}) translateZ(${z}px)`;
+            const rotation = (itemPos - relativeScroll) / 35 * 65;
+            const scale = 1 - (diff / 120);
+            const z = (diff < 12) ? 15 : 0;
+            item.style.transform = `rotateX(${rotation}deg) scale(${scale}) translateZ(${z}px)`;
             item.style.opacity = Math.max(0.1, 1 - (diff / 60));
         });
+    }
+
+    setTranslateY(y) {
+        this.translateY = y;
+        
+        if (this.isLoop) {
+            const originalCount = this.items.length - (2 * this.cloneCount);
+            const totalHeight = originalCount * this.itemHeight;
+            const centerOffset = (this.container.offsetHeight / 2) - (this.itemHeight / 2);
+            
+            const minBound = centerOffset - (this.items.length - this.cloneCount) * this.itemHeight;
+            const maxBound = centerOffset - (this.cloneCount - 1) * this.itemHeight;
+            
+            if (this.translateY < minBound) this.translateY += totalHeight;
+            if (this.translateY > maxBound) this.translateY -= totalHeight;
+        }
+
+        this.scroller.style.transform = `translateY(${this.translateY}px)`;
+        this.updateItemStyles();
     }
 
     scrollToValue(val, animate = true) {
@@ -197,63 +230,55 @@ class WheelPicker {
     }
 
     addEventListeners() {
-        // Desktop Drag
-        let isMouseDown = false;
-        this.viewport.addEventListener('mousedown', e => {
-            isMouseDown = true;
-            this.startY = e.pageY;
-            this.startScrollY = this.getTranslateY();
+        let isDragging = false;
+        
+        const onStart = (y) => {
+            isDragging = true;
+            this.startY = y;
+            this.startTranslateY = this.translateY;
             this.scroller.style.transition = 'none';
             this.viewport.style.cursor = 'grabbing';
-        });
+        };
 
-        window.addEventListener('mousemove', e => {
-            if (!isMouseDown) return;
-            const dy = e.pageY - this.startY;
-            this.scroller.style.transform = `translateY(${this.startScrollY + dy}px)`;
-            this.updateItemStyles();
-        });
+        const onMove = (y) => {
+            if (!isDragging) return;
+            const dy = y - this.startY;
+            this.setTranslateY(this.startTranslateY + dy);
+        };
 
-        window.addEventListener('mouseup', () => {
-            if (!isMouseDown) return;
-            isMouseDown = false;
+        const onEnd = () => {
+            if (!isDragging) return;
+            isDragging = false;
             this.viewport.style.cursor = 'ns-resize';
             this.snap();
-        });
+        };
+
+        // Desktop
+        this.viewport.addEventListener('mousedown', e => onStart(e.pageY));
+        window.addEventListener('mousemove', e => onMove(e.pageY));
+        window.addEventListener('mouseup', onEnd);
 
         // Touch
-        this.viewport.addEventListener('touchstart', e => {
-            this.startY = e.touches[0].pageY;
-            this.startScrollY = this.getTranslateY();
-            this.scroller.style.transition = 'none';
-        });
-
+        this.viewport.addEventListener('touchstart', e => onStart(e.touches[0].pageY));
         this.viewport.addEventListener('touchmove', e => {
             e.preventDefault();
-            const dy = e.touches[0].pageY - this.startY;
-            this.scroller.style.transform = `translateY(${this.startScrollY + dy}px)`;
-            this.updateItemStyles();
+            onMove(e.touches[0].pageY);
         }, { passive: false });
-
-        this.viewport.addEventListener('touchend', () => this.snap());
+        this.viewport.addEventListener('touchend', onEnd);
 
         // Wheel
         this.container.addEventListener('wheel', e => {
             e.preventDefault();
-            const dy = -e.deltaY;
-            const current = this.getTranslateY();
             this.scroller.style.transition = 'none';
-            this.scroller.style.transform = `translateY(${current + dy}px)`;
-            this.updateItemStyles();
+            this.setTranslateY(this.translateY - e.deltaY * 0.5);
             
             clearTimeout(this.wheelTimeout);
-            this.wheelTimeout = setTimeout(() => this.snap(), 100);
+            this.wheelTimeout = setTimeout(() => this.snap(), 150);
         }, { passive: false });
 
         // Tap to Edit
         this.viewport.addEventListener('click', (e) => {
-            // Only trigger if it wasn't a drag
-            if (Math.abs(this.getTranslateY() - this.startScrollY) < 5) {
+            if (Math.abs(this.translateY - this.startTranslateY) < 5) {
                 this.input.classList.remove('hidden');
                 this.input.focus();
                 this.input.select();
@@ -270,39 +295,13 @@ class WheelPicker {
         });
     }
 
-    getTranslateY() {
-        const style = window.getComputedStyle(this.scroller);
-        const matrix = new WebKitCSSMatrix(style.transform);
-        return matrix.m42;
-    }
-
     snap() {
-        const centerLine = this.container.offsetHeight / 2;
-        let closestItem = this.items[0];
-        let minDiff = Infinity;
-
-        this.items.forEach(item => {
-            const rect = item.getBoundingClientRect();
-            const containerRect = this.container.getBoundingClientRect();
-            const relativeCenter = rect.top + (rect.height / 2) - containerRect.top;
-            const diff = Math.abs(centerLine - relativeCenter);
-            if (diff < minDiff) {
-                minDiff = diff;
-                closestItem = item;
-            }
-        });
-
-        const newValue = parseFloat(closestItem.dataset.value);
-        const itemIndex = this.items.indexOf(closestItem);
-
-        if (this.isLoop) {
-            if (itemIndex < this.cloneCount || itemIndex >= this.items.length - this.cloneCount) {
-                // Jump to original without animation for seamless loop
-                this.setValue(newValue, false);
-                return;
-            }
-        }
-        this.setValue(newValue);
+        const centerOffset = (this.container.offsetHeight / 2) - (this.itemHeight / 2);
+        const index = Math.round((centerOffset - this.translateY) / this.itemHeight);
+        const clampedIndex = Math.max(0, Math.min(this.items.length - 1, index));
+        const item = this.items[clampedIndex];
+        const val = parseFloat(item.dataset.value);
+        this.setValue(val, true);
     }
 
     setValue(val, animate = true) {
@@ -310,8 +309,7 @@ class WheelPicker {
         if (isNaN(val)) val = this.min;
 
         if (this.isLoop) {
-            if (val > this.max) val = this.min;
-            else if (val < this.min) val = this.max;
+            // No clamping needed here as setTranslateY handles the visual loop
         } else {
             val = Math.max(this.min, Math.min(this.max, val));
         }
@@ -329,7 +327,7 @@ let state = {
     isWorkoutRunning: false,
     isPaused: false,
     readyTime: Math.min(9, parseInt(localStorage.getItem('fitbbeak_readyTime')) || 5),
-    interval: Math.min(19.9, parseFloat(localStorage.getItem('fitbbeak_interval')) || 1.5),
+    interval: Math.min(1.9, parseFloat(localStorage.getItem('fitbbeak_interval')) || 1.5),
     beepsPerRep: Math.min(19, parseInt(localStorage.getItem('fitbbeak_beepsPerRep')) || 2),
     maxReps: Math.min(199, parseInt(localStorage.getItem('fitbbeak_maxReps')) || 20),
     currentCount: 0,
@@ -370,7 +368,7 @@ function initPickers() {
         state.readyTime = val;
         localStorage.setItem('fitbbeak_readyTime', val);
     }, true);
-    pickers.interval = new WheelPicker('interval', 0.1, 19.9, 0.1, state.interval, (val) => {
+    pickers.interval = new WheelPicker('interval', 0.1, 1.9, 0.1, state.interval, (val) => {
         state.interval = val;
         localStorage.setItem('fitbbeak_interval', val);
         if (state.isWorkoutRunning && !state.isPaused) restartWorkoutTimer();
