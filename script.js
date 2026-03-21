@@ -343,7 +343,8 @@ let state = {
     startTime: null,
     timer: null,
     countdownTimer: null,
-    audioCtx: null
+    audioCtx: null,
+    statusKey: 'statusReady'
 };
 
 // DOM Elements
@@ -446,9 +447,7 @@ function updateUI() {
     elements.linkSupport.innerText = data.support;
     elements.copyright.innerText = `© 2026 ${data.brand}. All rights reserved.`;
 
-    if (!state.isWorkoutRunning) {
-        elements.statusText.innerText = data.statusReady;
-    }
+    elements.statusText.innerText = data[state.statusKey];
 
     // New: Units
     document.getElementById('unit-ready').innerText = data.unitSec;
@@ -501,6 +500,7 @@ function startWorkout() {
     elements.activeBtns.classList.remove('hidden');
     
     let prepCount = state.readyTime;
+    state.statusKey = 'statusPreparing';
     elements.statusText.innerText = i18n[state.lang].statusPreparing;
     elements.counter.innerText = prepCount;
     elements.mainContainer.classList.add('counting-down');
@@ -524,6 +524,7 @@ function startWorkout() {
 }
 
 function runWorkoutLoop() {
+    state.statusKey = 'statusWorkout';
     elements.statusText.innerText = i18n[state.lang].statusWorkout;
     elements.counter.innerText = "0";
     setProgress(0);
@@ -572,6 +573,7 @@ function stopWorkout() {
     clearInterval(state.countdownTimer);
     state.isWorkoutRunning = false;
     state.isPaused = false;
+    state.statusKey = 'statusStopped';
     
     elements.startBtn.classList.remove('hidden');
     elements.activeBtns.classList.add('hidden');
@@ -583,6 +585,7 @@ function stopWorkout() {
 
 function finishWorkout() {
     stopWorkout();
+    state.statusKey = 'statusFinished';
     elements.statusText.innerText = i18n[state.lang].statusFinished;
     playSound(1500, 0.5, 0.6, 'sine');
 }
