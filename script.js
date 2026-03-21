@@ -446,6 +446,10 @@ function updateUI() {
     elements.linkSupport.innerText = data.support;
     elements.copyright.innerText = `© 2026 ${data.brand}. All rights reserved.`;
 
+    if (!state.isWorkoutRunning) {
+        elements.statusText.innerText = data.statusReady;
+    }
+
     // New: Units
     document.getElementById('unit-ready').innerText = data.unitSec;
     document.getElementById('unit-interval').innerText = data.unitSec;
