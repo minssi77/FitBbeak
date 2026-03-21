@@ -286,7 +286,9 @@ class WheelPicker {
     }
 
     setValue(val, animate = true) {
-        val = parseFloat(val) || this.min;
+        val = parseFloat(val);
+        if (isNaN(val)) val = this.min;
+
         if (this.isLoop) {
             if (val > this.max) val = this.min;
             else if (val < this.min) val = this.max;
@@ -441,7 +443,7 @@ function adjustValue(id, dir) {
         else step = 0.1;
     }
 
-    val = Math.max(picker.min, Math.min(picker.max, val + (step * dir)));
+    val = val + (step * dir);
     val = parseFloat(val.toFixed(id === 'interval' ? 2 : 0));
     
     picker.setValue(val);
