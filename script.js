@@ -171,9 +171,21 @@ class WheelPicker {
             const diff = Math.abs(centerLine - relativeCenter);
             
             item.classList.remove('active', 'nearby', 'far');
-            if (diff < 15) item.classList.add('active');
-            else if (diff < 45) item.classList.add('nearby');
-            else item.classList.add('far');
+            
+            if (diff < 12) {
+                item.classList.add('active');
+            } else if (diff < 35) {
+                item.classList.add('nearby');
+            } else {
+                item.classList.add('far');
+            }
+            
+            // Dramatic 3D effect
+            const rotation = (relativeCenter - centerLine) / 35 * 65; // Max ~65deg
+            const scale = 1 - (diff / 120); // More dramatic scale
+            const z = (diff < 12) ? 15 : 0; // Pop active item forward
+            item.style.transform = `rotateX(${-rotation}deg) scale(${scale}) translateZ(${z}px)`;
+            item.style.opacity = Math.max(0.1, 1 - (diff / 60));
         });
     }
 
@@ -357,20 +369,20 @@ function initPickers() {
     pickers.readyTime = new WheelPicker('readyTime', 1, 9, 1, state.readyTime, (val) => {
         state.readyTime = val;
         localStorage.setItem('fitbbeak_readyTime', val);
-    });
+    }, true);
     pickers.interval = new WheelPicker('interval', 0.1, 19.9, 0.1, state.interval, (val) => {
         state.interval = val;
         localStorage.setItem('fitbbeak_interval', val);
         if (state.isWorkoutRunning && !state.isPaused) restartWorkoutTimer();
-    });
+    }, true, 10);
     pickers.beepsPerRep = new WheelPicker('beepsPerRep', 1, 19, 1, state.beepsPerRep, (val) => {
         state.beepsPerRep = val;
         localStorage.setItem('fitbbeak_beepsPerRep', val);
-    });
+    }, true);
     pickers.maxReps = new WheelPicker('maxReps', 1, 199, 1, state.maxReps, (val) => {
         state.maxReps = val;
         localStorage.setItem('fitbbeak_maxReps', val);
-    });
+    }, true);
 }
 
 // Progress Ring Configuration
