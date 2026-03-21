@@ -123,9 +123,17 @@ class WheelPicker {
     generateItems() {
         this.scroller.innerHTML = '';
         this.items = [];
-        const values = [];
-        for (let v = this.min; v <= this.max; v = parseFloat((v + this.step).toFixed(2))) {
-            values.push(v);
+        let values = [];
+
+        if (this.id === 'interval') {
+            // Specialized generation for Interval (0.1 / 0.8 / 1.5 logic)
+            for (let v = 0.1; v <= 0.8; v = parseFloat((v + 0.1).toFixed(2))) values.push(v);
+            for (let v = 0.81; v <= 1.49; v = parseFloat((v + 0.01).toFixed(2))) values.push(v);
+            for (let v = 1.5; v <= 19.9; v = parseFloat((v + 0.1).toFixed(2))) values.push(v);
+        } else {
+            for (let v = this.min; v <= this.max; v = parseFloat((v + this.step).toFixed(2))) {
+                values.push(v);
+            }
         }
 
         const renderValues = this.isLoop ? 
@@ -308,10 +316,10 @@ let state = {
     theme: localStorage.getItem('fitbbeak_theme') || 'dark',
     isWorkoutRunning: false,
     isPaused: false,
-    readyTime: Math.min(10, parseInt(localStorage.getItem('fitbbeak_readyTime')) || 5),
-    interval: Math.min(15.0, parseFloat(localStorage.getItem('fitbbeak_interval')) || 1.5),
-    beepsPerRep: Math.min(20, parseInt(localStorage.getItem('fitbbeak_beepsPerRep')) || 2),
-    maxReps: Math.min(100, parseInt(localStorage.getItem('fitbbeak_maxReps')) || 20),
+    readyTime: Math.min(9, parseInt(localStorage.getItem('fitbbeak_readyTime')) || 5),
+    interval: Math.min(19.9, parseFloat(localStorage.getItem('fitbbeak_interval')) || 1.5),
+    beepsPerRep: Math.min(19, parseInt(localStorage.getItem('fitbbeak_beepsPerRep')) || 2),
+    maxReps: Math.min(199, parseInt(localStorage.getItem('fitbbeak_maxReps')) || 20),
     currentCount: 0,
     currentBeep: 0,
     startTime: null,
@@ -346,20 +354,20 @@ const elements = {
 // Picker Instances
 let pickers = {};
 function initPickers() {
-    pickers.readyTime = new WheelPicker('readyTime', 1, 10, 1, state.readyTime, (val) => {
+    pickers.readyTime = new WheelPicker('readyTime', 1, 9, 1, state.readyTime, (val) => {
         state.readyTime = val;
         localStorage.setItem('fitbbeak_readyTime', val);
     });
-    pickers.interval = new WheelPicker('interval', 0.1, 15.0, 0.1, state.interval, (val) => {
+    pickers.interval = new WheelPicker('interval', 0.1, 19.9, 0.1, state.interval, (val) => {
         state.interval = val;
         localStorage.setItem('fitbbeak_interval', val);
         if (state.isWorkoutRunning && !state.isPaused) restartWorkoutTimer();
     });
-    pickers.beepsPerRep = new WheelPicker('beepsPerRep', 1, 20, 1, state.beepsPerRep, (val) => {
+    pickers.beepsPerRep = new WheelPicker('beepsPerRep', 1, 19, 1, state.beepsPerRep, (val) => {
         state.beepsPerRep = val;
         localStorage.setItem('fitbbeak_beepsPerRep', val);
     });
-    pickers.maxReps = new WheelPicker('maxReps', 1, 100, 1, state.maxReps, (val) => {
+    pickers.maxReps = new WheelPicker('maxReps', 1, 199, 1, state.maxReps, (val) => {
         state.maxReps = val;
         localStorage.setItem('fitbbeak_maxReps', val);
     });
@@ -438,9 +446,15 @@ function adjustValue(id, dir) {
     
     // Smart Step for interval (kept from original)
     if (id === 'interval') {
-        if (val < 0.8) step = 0.1;
-        else if (val >= 0.8 && val < 1.5) step = 0.01;
-        else step = 0.1;
+        if (dir === 1) { // Increasing
+            if (val < 0.795) step = 0.1;
+            else if (val >= 0.795 && val < 1.495) step = 0.01;
+            else step = 0.1;
+        } else { // Decreasing
+            if (val <= 0.805) step = 0.1;
+            else if (val > 0.805 && val <= 1.505) step = 0.01;
+            else step = 0.1;
+        }
     }
 
     val = val + (step * dir);
