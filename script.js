@@ -124,14 +124,9 @@ class WheelPicker {
     generateItems() {
         this.scroller.innerHTML = '';
         this.items = [];
-        let values = [];
+        let values = (this.id === 'interval') ? this.getIntervalValues() : [];
 
-        if (this.id === 'interval') {
-            // Specialized generation for Interval (0.1 / 0.8 / 1.5 logic)
-            for (let v = 0.1; v <= 0.8; v = parseFloat((v + 0.1).toFixed(2))) values.push(v);
-            for (let v = 0.81; v <= 1.49; v = parseFloat((v + 0.01).toFixed(2))) values.push(v);
-            for (let v = 1.5; v <= 19.9; v = parseFloat((v + 0.1).toFixed(2))) values.push(v);
-        } else {
+        if (this.id !== 'interval') {
             for (let v = this.min; v <= this.max; v = parseFloat((v + this.step).toFixed(2))) {
                 values.push(v);
             }
@@ -309,7 +304,8 @@ class WheelPicker {
         if (isNaN(val)) val = this.min;
 
         if (this.isLoop) {
-            // No clamping needed here as setTranslateY handles the visual loop
+            if (val > this.max) val = this.min;
+            else if (val < this.min) val = this.max;
         } else {
             val = Math.max(this.min, Math.min(this.max, val));
         }
