@@ -76,9 +76,13 @@ h1 {
 .header-controls {
     grid-column: 3;
     display: flex;
-    gap: 12px;
     align-items: center;
     justify-content: flex-end;
+}
+
+/* Fallback for older browsers (iOS < 14.5) that don't support flex gap */
+.header-controls > * + * {
+    margin-left: 12px;
 }
 
 .btn-icon {
