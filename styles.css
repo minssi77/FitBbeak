@@ -97,7 +97,11 @@ h1 {
 .btn-icon svg {
     width: 20px;
     height: 20px;
-    fill: currentColor;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 /* Theme Toggle Icon Logic: 
@@ -156,7 +160,7 @@ label {
 .number-control {
     display: flex;
     align-items: center;
-    background: inherit; /* Unify with card background */
+    background: rgba(0,0,0,0.05); /* Match -, + background for unified wheel area */
     border-radius: 12px;
     overflow: hidden;
     height: 70px;
@@ -270,7 +274,7 @@ label {
 
 .btn-adjust {
     border: none;
-    background: rgba(0,0,0,0.05);
+    background: transparent;
     color: var(--text-main);
     width: 32px;
     height: 100%;
