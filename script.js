@@ -440,8 +440,8 @@ function playSound(freq, duration = 0.1, volume = 0.5, type = 'sine') {
     if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (state.audioCtx.state === 'suspended') state.audioCtx.resume();
 
-    // Increase beep volume by 30%
-    volume = Math.min(1.0, volume * 1.3);
+    // Increase beep volume by 50%
+    volume = Math.min(1.0, volume * 1.5);
 
     const now = state.audioCtx.currentTime;
     const osc = state.audioCtx.createOscillator();
