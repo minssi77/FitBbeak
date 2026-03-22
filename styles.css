@@ -306,6 +306,7 @@ label {
 
 .progress-container {
     position: relative;
+    container-type: inline-size;
     width: clamp(220px, 65vw, 280px);
     height: clamp(220px, 65vw, 280px);
     display: flex;
@@ -334,7 +335,8 @@ label {
 
 #counter {
     font-family: 'Oswald', sans-serif;
-    font-size: clamp(4rem, 20vw, 8rem);
+    font-size: clamp(5rem, 25vw, 8rem); /* Safari <16 Fallback */
+    font-size: 45cqw; /* Exact proportional scaling */
     line-height: 1;
     font-weight: 700;
     margin-bottom: 0;
@@ -343,9 +345,11 @@ label {
 
 #status-text {
     font-weight: 600;
-    font-size: clamp(0.9rem, 4.5vw, 1.3rem);
+    font-size: clamp(1rem, 5vw, 1.2rem); /* Fallback */
+    font-size: 6.5cqw; /* Exact proportional scaling */
     color: var(--text-muted);
-    margin-top: clamp(5px, 3vw, 15px);
+    margin-top: clamp(8px, 3vw, 15px); /* Fallback */
+    margin-top: 5cqw;
 }
 
 /* Controls */
