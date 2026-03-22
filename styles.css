@@ -343,9 +343,9 @@ label {
 
 #status-text {
     font-weight: 600;
-    font-size: 1.2rem;
+    font-size: clamp(0.9rem, 4.5vw, 1.3rem);
     color: var(--text-muted);
-    margin-top: 15px;
+    margin-top: clamp(5px, 3vw, 15px);
 }
 
 /* Controls */
