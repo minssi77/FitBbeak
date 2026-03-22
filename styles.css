@@ -119,22 +119,84 @@ body:not(.dark-mode) .sun-icon,
     display: none;
 }
 
-#langSelect {
+/* Custom Select for Language to ensure rounded corners */
+.custom-select {
+    position: relative;
+    font-family: inherit;
+    font-weight: 600;
+}
+
+.custom-select .select-selected {
     background: transparent;
     border: 1px solid var(--border-color);
     border-radius: 12px;
-    padding: 6px 10px;
+    padding: 6px 22px 6px 10px;
     color: var(--text-main);
-    font-family: inherit;
-    font-weight: 600;
     cursor: pointer;
-    outline: none;
+    user-select: none;
+    position: relative;
+    min-width: 55px;
+    text-align: center;
+    transition: background 0.2s;
 }
 
-/* Fix the dropdown options background color for dark/light modes */
-#langSelect option {
+.custom-select .select-selected:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+.dark-mode .custom-select .select-selected:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+.custom-select .select-selected::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    margin-top: -2px;
+    border: 4px solid transparent;
+    border-top-color: var(--text-main);
+    border-bottom: none;
+    transition: transform 0.2s;
+}
+
+.custom-select .select-selected.select-arrow-active::after {
+    transform: rotate(180deg);
+}
+
+.custom-select .select-items {
+    position: absolute;
     background-color: var(--dropdown-bg);
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    z-index: 100;
+    overflow: hidden;
+    min-width: 100%;
+}
+
+.dark-mode .custom-select .select-items {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+.custom-select .select-items div {
     color: var(--text-main);
+    padding: 10px 16px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+    text-align: center;
+}
+
+.custom-select .select-items div:hover {
+    background-color: rgba(127, 140, 141, 0.1);
+}
+
+.select-hide {
+    display: none;
 }
 
 /* Settings Grid */

@@ -363,7 +363,9 @@ let state = {
 const elements = {
     body: document.body,
     brandHeader: document.getElementById('brand-header'),
-    langSelect: document.getElementById('langSelect'),
+    langSelector: document.getElementById('langSelector'),
+    langSelected: document.getElementById('langSelected'),
+    langOptions: document.getElementById('langOptions'),
     themeToggle: document.getElementById('theme-toggle'),
     counter: document.getElementById('counter'),
     statusText: document.getElementById('status-text'),
@@ -438,20 +440,24 @@ function playSound(freq, duration = 0.1, volume = 0.5, type = 'sine') {
     if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (state.audioCtx.state === 'suspended') state.audioCtx.resume();
 
+    // Increase beep volume by 30%
+    volume = Math.min(1.0, volume * 1.3);
+
+    const now = state.audioCtx.currentTime;
     const osc = state.audioCtx.createOscillator();
     const gain = state.audioCtx.createGain();
 
     osc.type = type;
-    osc.frequency.setValueAtTime(freq, state.audioCtx.currentTime);
+    osc.frequency.setValueAtTime(freq, now);
 
-    gain.gain.setValueAtTime(volume, state.audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, state.audioCtx.currentTime + duration);
+    gain.gain.setValueAtTime(volume, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + duration);
 
     osc.connect(gain);
     gain.connect(state.audioCtx.destination);
 
-    osc.start();
-    osc.stop(state.audioCtx.currentTime + duration);
+    osc.start(now);
+    osc.stop(now + duration);
 
     // Visual Flash
     elements.flashOverlay.classList.remove('flash-active');
@@ -572,6 +578,10 @@ function startWorkout() {
     state.currentCount = 0;
     state.currentBeep = 0;
     
+    // Resume AudioContext immediately for zero-delay
+    if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (state.audioCtx.state === 'suspended') state.audioCtx.resume();
+
     elements.startBtn.classList.add('hidden');
     elements.activeBtns.classList.remove('hidden');
     
@@ -581,23 +591,26 @@ function startWorkout() {
     elements.counter.innerText = prepCount;
     elements.mainContainer.classList.add('counting-down');
     
-    playSound(440, 0.1, 0.3, 'square'); // Prep beep
+    // Initial beep
+    playSound(prepCount <= 3 ? 800 : 440, 0.1, prepCount <= 3 ? 0.5 : 0.3, 'square');
 
     state.countdownTimer = setInterval(() => {
         if (state.isPaused) return;
         prepCount--;
         if (prepCount > 0) {
             elements.counter.innerText = prepCount;
-            playSound(440, 0.1, 0.3, 'square');
+            // Short beep at 3, 2, 1
+            playSound(prepCount <= 3 ? 800 : 440, 0.1, prepCount <= 3 ? 0.5 : 0.3, 'square');
             setProgress(( (state.readyTime - prepCount) / state.readyTime) * 100);
             
             if (prepCount <= 3) {
-                speak(prepCount.toString());
+                elements.counter.style.transform = "scale(1.2)";
+                setTimeout(() => elements.counter.style.transform = "scale(1)", 100);
             }
         } else {
             clearInterval(state.countdownTimer);
             elements.mainContainer.classList.remove('counting-down');
-            playSound(880, 0.3, 0.6, 'sine'); // Start beep
+            playSound(1000, 0.6, 0.7, 'sine'); // Long beep for start
             speak(i18n[state.lang].speechStart);
             runWorkoutLoop();
         }
@@ -649,7 +662,11 @@ function pauseWorkout() {
     elements.pauseBtn.innerText = state.isPaused ? i18n[state.lang].resume : i18n[state.lang].pause;
     
     if (state.isPaused) {
+        playSound(900, 0.6, 0.7, 'sine'); // Long beep for rest
         speak(i18n[state.lang].speechRest);
+    } else {
+        playSound(1000, 0.6, 0.7, 'sine'); // Long beep for resume/start
+        speak(i18n[state.lang].speechStart);
     }
 }
 
@@ -673,15 +690,35 @@ function finishWorkout() {
     stopWorkout();
     state.statusKey = 'statusFinished';
     elements.statusText.innerText = i18n[state.lang].statusFinished;
-    playSound(1500, 0.5, 0.6, 'sine');
+    playSound(1500, 0.8, 0.7, 'sine'); // Long beep for finish
     speak(i18n[state.lang].speechFinished);
 }
 
 // Event Listeners
-elements.langSelect.addEventListener('change', (e) => {
-    state.lang = e.target.value;
-    localStorage.setItem('fitbbeak_lang', state.lang);
-    updateUI();
+
+// Custom Language Selector Logic
+elements.langSelected.addEventListener('click', (e) => {
+    e.stopPropagation();
+    elements.langOptions.classList.toggle('select-hide');
+    elements.langSelected.classList.toggle('select-arrow-active');
+});
+
+elements.langOptions.querySelectorAll('div').forEach(opt => {
+    opt.addEventListener('click', () => {
+        elements.langSelected.innerText = opt.innerText;
+        elements.langOptions.classList.add('select-hide');
+        elements.langSelected.classList.remove('select-arrow-active');
+        state.lang = opt.dataset.value;
+        localStorage.setItem('fitbbeak_lang', state.lang);
+        updateUI();
+    });
+});
+
+document.addEventListener('click', (e) => {
+    if (!elements.langSelector.contains(e.target)) {
+        elements.langOptions.classList.add('select-hide');
+        elements.langSelected.classList.remove('select-arrow-active');
+    }
 });
 
 elements.themeToggle.addEventListener('click', toggleTheme);
@@ -697,7 +734,10 @@ elements.pauseBtn.addEventListener('click', pauseWorkout);
 elements.stopBtn.addEventListener('click', stopWorkout);
 
 // Init
-elements.langSelect.value = state.lang;
+const initialLangOpt = elements.langOptions.querySelector(`div[data-value="${state.lang}"]`);
+if (initialLangOpt) {
+    elements.langSelected.innerText = initialLangOpt.innerText;
+}
 initPickers();
 updateUI();
 setProgress(0);
