@@ -191,7 +191,8 @@ class WheelPicker {
         let values = [];
         for (let v = 0.1; v <= 0.8; v = parseFloat((v + 0.1).toFixed(2))) values.push(v);
         for (let v = 0.81; v <= 1.49; v = parseFloat((v + 0.01).toFixed(2))) values.push(v);
-        for (let v = 1.5; v <= 1.9; v = parseFloat((v + 0.1).toFixed(2))) values.push(v);
+        for (let v = 1.5; v <= 2.5; v = parseFloat((v + 0.1).toFixed(2))) values.push(v);
+        for (let v = 3.0; v <= 5.0; v = parseFloat((v + 0.5).toFixed(2))) values.push(v);
         return values;
     }
 
@@ -347,7 +348,7 @@ let state = {
     isWorkoutRunning: false,
     isPaused: false,
     readyTime: Math.min(9, parseInt(localStorage.getItem('fitbbeak_readyTime')) || 5),
-    interval: Math.min(1.9, parseFloat(localStorage.getItem('fitbbeak_interval')) || 1.5),
+    interval: Math.min(5.0, parseFloat(localStorage.getItem('fitbbeak_interval')) || 1.5),
     beepsPerRep: Math.min(19, parseInt(localStorage.getItem('fitbbeak_beepsPerRep')) || 2),
     maxReps: Math.min(199, parseInt(localStorage.getItem('fitbbeak_maxReps')) || 20),
     currentCount: 0,
@@ -409,7 +410,7 @@ function initPickers() {
         state.readyTime = val;
         localStorage.setItem('fitbbeak_readyTime', val);
     }, true);
-    pickers.interval = new WheelPicker('interval', 0.1, 1.9, 0.1, state.interval, (val) => {
+    pickers.interval = new WheelPicker('interval', 0.1, 5.0, 0.1, state.interval, (val) => {
         state.interval = val;
         localStorage.setItem('fitbbeak_interval', val);
         if (state.isWorkoutRunning && !state.isPaused) restartWorkoutTimer();
@@ -558,11 +559,13 @@ function adjustValue(id, dir) {
         if (dir === 1) { // Increasing
             if (val < 0.795) step = 0.1;
             else if (val >= 0.795 && val < 1.495) step = 0.01;
-            else step = 0.1;
+            else if (val >= 1.495 && val < 2.495) step = 0.1;
+            else step = 0.5;
         } else { // Decreasing
             if (val <= 0.805) step = 0.1;
             else if (val > 0.805 && val <= 1.505) step = 0.01;
-            else step = 0.1;
+            else if (val > 1.505 && val <= 2.505) step = 0.1;
+            else step = 0.5;
         }
     }
 
