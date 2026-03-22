@@ -10,6 +10,7 @@
     --text-muted: #7f8c8d;
     --border-color: rgba(0, 0, 0, 0.05);
     --glass-blur: 12px;
+    --dropdown-bg: #ffffff;
 }
 
 body.dark-mode {
@@ -18,6 +19,7 @@ body.dark-mode {
     --text-main: #f1f5f9;
     --text-muted: #94a3b8;
     --border-color: rgba(255, 255, 255, 0.1);
+    --dropdown-bg: #1e293b; /* Solid color matching the execution window (card) */
 }
 
 * {
@@ -131,7 +133,7 @@ body:not(.dark-mode) .sun-icon,
 
 /* Fix the dropdown options background color for dark/light modes */
 #langSelect option {
-    background-color: var(--bg-color);
+    background-color: var(--dropdown-bg);
     color: var(--text-main);
 }
 
