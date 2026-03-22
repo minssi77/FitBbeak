@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #9b59b6;
+            --text-main: #2c3e50;
+            --text-muted: #7f8c8d;
+            --border-color: rgba(0, 0, 0, 0.05);
+            --bg-color: transparent;
+        }
+        
+        .dark-mode {
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px 0;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .guide-section {
+            max-width: 480px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        .guide-section h2 {
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--primary);
+            padding-left: 12px;
+        }
+
+        .guide-text {
+            color: var(--text-muted);
+        }
+
+        .main-footer {
+            width: 100%;
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-links {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--primary); }
+
+        .support-link { color: #f1c40f !important; font-weight: 700; }
+
+        #copyright { color: var(--text-muted); font-size: 0.8rem; }
+    </style>
+</head>
+<body id="explanation-body">
+    <section class="guide-section">
+        <h2 id="guide-title">Why Workout Tempo Matters?</h2>
+        <div id="guide-content" class="guide-text">
+            <p>Maintaining a consistent tempo during exercises like squats and push-ups is crucial for maximizing muscle growth and minimizing the risk of injury. <strong>FitBbeak</strong> helps you focus purely on your movement by providing precise auditory signals.</p>
+            <p>The science of "Time Under Tension" (TUT) shows that controlled repetitions lead to better neuromuscular adaptation. By setting your ideal interval with <strong>FitBbeak</strong>, you can ensure every rep counts.</p>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="footer-links">
+            <a href="#" id="link-privacy">Privacy Policy</a>
+            <a href="#" id="link-terms">Terms of Service</a>
+            <a href="#" class="support-link" id="link-support">Support (Toss Me)</a>
+        </div>
+        <p id="copyright">© 2026 FitBbeak. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Synchronize theme from parent
+        function updateTheme(isDark) {
+            document.body.className = isDark ? 'dark-mode' : '';
+        }
+
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'THEME_UPDATE') {
+                updateTheme(event.data.isDark);
+            }
+            if (event.data.type === 'I18N_UPDATE') {
+                const data = event.data.content;
+                document.getElementById('guide-title').innerText = data.guideTitle;
+                document.getElementById('guide-content').innerHTML = data.guideContent;
+                document.getElementById('link-privacy').innerText = data.privacy;
+                document.getElementById('link-terms').innerText = data.terms;
+                document.getElementById('link-support').innerText = data.support;
+                document.getElementById('copyright').innerText = `© 2026 ${data.brand || 'FitBbeak'}. All rights reserved.`;
+            }
+        });
+
+        // Request initial state
+        window.parent.postMessage({ type: 'READY' }, '*');
+    </script>
+</body>
+</html>

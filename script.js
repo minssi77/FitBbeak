@@ -362,13 +362,31 @@ const elements = {
     mainContainer: document.getElementById('main-container'),
     flashOverlay: document.getElementById('flash-overlay'),
     progressRing: document.querySelector('.progress-ring__circle'),
-    guideTitle: document.getElementById('guide-title'),
-    guideContent: document.getElementById('guide-content'),
-    linkPrivacy: document.getElementById('link-privacy'),
-    linkTerms: document.getElementById('link-terms'),
-    linkSupport: document.getElementById('link-support'),
-    copyright: document.getElementById('copyright')
+    explanationFrame: document.getElementById('explanation-frame')
 };
+
+// Iframe Communication
+function syncIframe() {
+    if (!elements.explanationFrame || !elements.explanationFrame.contentWindow) return;
+    
+    // Send Theme
+    elements.explanationFrame.contentWindow.postMessage({
+        type: 'THEME_UPDATE',
+        isDark: state.theme === 'dark'
+    }, '*');
+
+    // Send I18N
+    elements.explanationFrame.contentWindow.postMessage({
+        type: 'I18N_UPDATE',
+        content: i18n[state.lang]
+    }, '*');
+}
+
+window.addEventListener('message', (event) => {
+    if (event.data.type === 'READY') {
+        syncIframe();
+    }
+});
 
 // Picker Instances
 let pickers = {};
@@ -440,14 +458,17 @@ function updateUI() {
     elements.startBtn.innerText = data.start;
     elements.stopBtn.innerText = data.stop;
     elements.pauseBtn.innerText = state.isPaused ? data.resume : data.pause;
-    elements.guideTitle.innerText = data.guideTitle;
-    elements.guideContent.innerHTML = data.guideContent;
-    elements.linkPrivacy.innerText = data.privacy;
-    elements.linkTerms.innerText = data.terms;
-    elements.linkSupport.innerText = data.support;
-    elements.copyright.innerText = `© 2026 ${data.brand}. All rights reserved.`;
+    
+    // Units
+    document.getElementById('unit-ready').innerText = data.unitSec;
+    document.getElementById('unit-interval').innerText = data.unitSec;
+    document.getElementById('unit-beeps').innerText = data.unitCount;
+    document.getElementById('unit-goal').innerText = data.unitReps;
 
     elements.statusText.innerText = data[state.statusKey];
+
+    // Synchronize Iframe
+    syncIframe();
 
     // New: Units
     document.getElementById('unit-ready').innerText = data.unitSec;
@@ -457,6 +478,9 @@ function updateUI() {
 
     // Theme
     elements.body.className = state.theme === 'dark' ? 'dark-mode' : '';
+    
+    // Update Iframe Theme (extra safety)
+    syncIframe();
 }
 
 // Actions

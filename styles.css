@@ -63,10 +63,9 @@ body {
 h1 {
     grid-column: 2;
     font-family: 'Oswald', sans-serif;
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    letter-spacing: 0.5px;
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
     background-clip: text;
@@ -101,8 +100,12 @@ h1 {
     fill: currentColor;
 }
 
-.dark-mode .sun-icon, 
-body:not(.dark-mode) .moon-icon {
+/* Theme Toggle Icon Logic: 
+   - Dark mode -> SUN (to brighten)
+   - Light mode -> MOON (to dim)
+*/
+body:not(.dark-mode) .sun-icon, 
+.dark-mode .moon-icon {
     display: none;
 }
 
@@ -127,17 +130,19 @@ body:not(.dark-mode) .moon-icon {
 }
 
 .setting-card {
-    background: rgba(0, 0, 0, 0.03);
-    border-radius: 20px;
-    padding: 12px;
+    background: white;
+    border-radius: 24px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
 
 .dark-mode .setting-card {
     background: rgba(255, 255, 255, 0.05);
+    box-shadow: none;
 }
 
 label {
@@ -151,11 +156,15 @@ label {
 .number-control {
     display: flex;
     align-items: center;
-    background: var(--bg-color);
+    background: inherit; /* Unify with card background */
     border-radius: 12px;
     overflow: hidden;
-    height: 70px; /* Increased for wheel */
-    border: 1px solid var(--border-color);
+    height: 70px;
+    border: none; /* Premium look: remove border */
+}
+
+.dark-mode .number-control {
+    background: rgba(0,0,0,0.2);
 }
 
 .wheel-picker {
@@ -462,12 +471,52 @@ label {
     color: var(--warning);
 }
 
-@media (max-width: 400px) {
-    .fitbbeak-container { padding: 20px; }
-    #counter { font-size: 6rem; }
-    .progress-container { width: 220px; height: 220px; }
-    .progress-ring { width: 220px; height: 220px; }
-    .progress-ring__circle-bg, .progress-ring__circle {
-        r: 90; cx: 110; cy: 110;
+/* WebView Container */
+.webview-container {
+    width: 100%;
+    max-width: 480px;
+    margin-top: 20px;
+    border-radius: 32px;
+    overflow: hidden;
+    background: var(--card-bg);
+    backdrop-filter: blur(var(--glass-blur));
+}
+
+#explanation-frame {
+    width: 100%;
+    height: 600px; /* Approximate height, adjusted dynamically */
+    display: block;
+}
+
+/* High-Precision Responsiveness Core */
+@media (max-width: 520px) {
+    body { padding: 10px; }
+    .fitbbeak-container, .webview-container {
+        width: 100%;
+        max-width: 100%;
+        margin-top: 10px;
+        border-radius: 24px;
+        padding: 20px;
     }
+}
+
+@media (max-width: 400px) {
+    h1 { font-size: 1.8rem; }
+    #counter { font-size: clamp(4rem, 25vw, 6rem); }
+    .settings-grid { gap: 10px; }
+    .progress-container { 
+        width: clamp(180px, 60vw, 240px);
+        height: clamp(180px, 60vw, 240px);
+    }
+    .progress-ring {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+/* Prevent scaling issues on small heights */
+@media (max-height: 700px) {
+    .fitbbeak-container { margin-top: 10px; padding: 15px; }
+    .progress-container { width: 180px; height: 180px; }
+    #counter { font-size: 5rem; }
 }
