@@ -459,6 +459,13 @@ function playSound(freq, duration = 0.1, volume = 0.5, type = 'sine') {
     elements.flashOverlay.classList.add('flash-active');
 }
 
+let speechVoices = [];
+if ('speechSynthesis' in window) {
+    const updateVoices = () => { speechVoices = window.speechSynthesis.getVoices(); };
+    window.speechSynthesis.onvoiceschanged = updateVoices;
+    updateVoices();
+}
+
 function speak(text) {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel(); // Prevent overlapping
@@ -470,7 +477,25 @@ function speak(text) {
         'de': 'de-DE',
         'es': 'es-ES'
     };
-    utterance.lang = langMap[state.lang] || 'en-US';
+    const targetLang = langMap[state.lang] || 'en-US';
+    utterance.lang = targetLang;
+    
+    if (speechVoices.length > 0) {
+        const langCode = targetLang.split('-')[0];
+        const available = speechVoices.filter(v => v.lang.startsWith(langCode));
+        
+        if (available.length > 0) {
+            // Priority given to known high-quality female voices on macOS/Windows/Mobile
+            const femaleNames = ['yuna', 'sora', 'samantha', 'victoria', 'zira', 'karen', 'anna', 'monica', 'paulina', 'female', 'google'];
+            let selectedVoice = available.find(v => femaleNames.some(name => v.name.toLowerCase().includes(name)));
+            
+            utterance.voice = selectedVoice || available[0];
+        }
+    }
+    
+    // Slightly higher pitch generally sounds softer and more pleasant
+    utterance.pitch = 1.1;
+    
     window.speechSynthesis.speak(utterance);
 }
 
