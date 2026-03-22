@@ -21,7 +21,10 @@ const i18n = {
         support: 'Support (Toss Me)',
         unitSec: 'sec',
         unitCount: 'count',
-        unitReps: 'reps'
+        unitReps: 'reps',
+        speechStart: 'Start',
+        speechRest: 'Rest',
+        speechFinished: 'Great job'
     },
     ko: {
         brand: '핏삑',
@@ -45,7 +48,10 @@ const i18n = {
         support: '후원하기 (Toss Me)',
         unitSec: '초',
         unitCount: '회',
-        unitReps: '개'
+        unitReps: '개',
+        speechStart: '시작',
+        speechRest: '휴식',
+        speechFinished: '수고하셨습니다'
     },
     de: {
         brand: 'FitBbeak',
@@ -69,7 +75,10 @@ const i18n = {
         support: 'Support (Toss Me)',
         unitSec: 'Sek',
         unitCount: 'Zähl',
-        unitReps: 'Wdh'
+        unitReps: 'Wdh',
+        speechStart: 'Start',
+        speechRest: 'Pause',
+        speechFinished: 'Gut gemacht'
     },
     es: {
         brand: 'FitBbeak',
@@ -93,7 +102,10 @@ const i18n = {
         support: 'Apoyar (Toss Me)',
         unitSec: 'seg',
         unitCount: 'cont',
-        unitReps: 'reps'
+        unitReps: 'reps',
+        speechStart: 'Inicio',
+        speechRest: 'Descanso',
+        speechFinished: 'Buen trabajo'
     }
 };
 
@@ -447,6 +459,21 @@ function playSound(freq, duration = 0.1, volume = 0.5, type = 'sine') {
     elements.flashOverlay.classList.add('flash-active');
 }
 
+function speak(text) {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel(); // Prevent overlapping
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    const langMap = {
+        'ko': 'ko-KR',
+        'en': 'en-US',
+        'de': 'de-DE',
+        'es': 'es-ES'
+    };
+    utterance.lang = langMap[state.lang] || 'en-US';
+    window.speechSynthesis.speak(utterance);
+}
+
 // UI Updates
 function updateUI() {
     const data = i18n[state.lang];
@@ -538,10 +565,15 @@ function startWorkout() {
             elements.counter.innerText = prepCount;
             playSound(440, 0.1, 0.3, 'square');
             setProgress(( (state.readyTime - prepCount) / state.readyTime) * 100);
+            
+            if (prepCount <= 3) {
+                speak(prepCount.toString());
+            }
         } else {
             clearInterval(state.countdownTimer);
             elements.mainContainer.classList.remove('counting-down');
             playSound(880, 0.3, 0.6, 'sine'); // Start beep
+            speak(i18n[state.lang].speechStart);
             runWorkoutLoop();
         }
     }, 1000);
@@ -590,9 +622,14 @@ function restartWorkoutTimer() {
 function pauseWorkout() {
     state.isPaused = !state.isPaused;
     elements.pauseBtn.innerText = state.isPaused ? i18n[state.lang].resume : i18n[state.lang].pause;
+    
+    if (state.isPaused) {
+        speak(i18n[state.lang].speechRest);
+    }
 }
 
 function stopWorkout() {
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     clearInterval(state.timer);
     clearInterval(state.countdownTimer);
     state.isWorkoutRunning = false;
@@ -612,6 +649,7 @@ function finishWorkout() {
     state.statusKey = 'statusFinished';
     elements.statusText.innerText = i18n[state.lang].statusFinished;
     playSound(1500, 0.5, 0.6, 'sine');
+    speak(i18n[state.lang].speechFinished);
 }
 
 // Event Listeners
