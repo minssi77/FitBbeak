@@ -143,11 +143,17 @@ class WheelPicker {
         this.addEventListeners();
         // Delay initial render to ensure container height is available
         setTimeout(() => {
-            if (this.items.length > 0) this.itemHeight = this.items[0].getBoundingClientRect().height || 30;
+            if (this.items.length > 0) {
+                const h = parseFloat(window.getComputedStyle(this.items[0]).height);
+                this.itemHeight = h > 0 ? h : 30;
+            }
             this.scrollToValue(this.value, false);
         }, 50);
         window.addEventListener('resize', () => {
-             if (this.items.length > 0) this.itemHeight = this.items[0].getBoundingClientRect().height || 30;
+             if (this.items.length > 0) {
+                 const h = parseFloat(window.getComputedStyle(this.items[0]).height);
+                 this.itemHeight = h > 0 ? h : 30;
+             }
              this.render();
         });
     }
@@ -331,6 +337,17 @@ class WheelPicker {
         this.setValue(val, true);
     }
 
+    getNearestValue(rawVal) {
+        let values = (this.id === 'interval') ? this.getIntervalValues() : [];
+        if (this.id !== 'interval') {
+            for (let v = this.min; v <= this.max; v = parseFloat((v + this.step).toFixed(2))) {
+                values.push(v);
+            }
+        }
+        if (values.length === 0) return rawVal;
+        return values.reduce((prev, curr) => Math.abs(curr - rawVal) < Math.abs(prev - rawVal) ? curr : prev);
+    }
+
     setValue(val, animate = true) {
         val = parseFloat(val);
         if (isNaN(val)) val = this.min;
@@ -341,6 +358,8 @@ class WheelPicker {
         } else {
             val = Math.max(this.min, Math.min(this.max, val));
         }
+        
+        val = this.getNearestValue(val);
         
         this.value = val;
         this.scrollToValue(val, animate);
