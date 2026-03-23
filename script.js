@@ -142,7 +142,14 @@ class WheelPicker {
         this.generateItems();
         this.addEventListeners();
         // Delay initial render to ensure container height is available
-        setTimeout(() => this.scrollToValue(this.value, false), 0);
+        setTimeout(() => {
+            if (this.items.length > 0) this.itemHeight = this.items[0].offsetHeight || 30;
+            this.scrollToValue(this.value, false);
+        }, 0);
+        window.addEventListener('resize', () => {
+             if (this.items.length > 0) this.itemHeight = this.items[0].offsetHeight || 30;
+             this.render();
+        });
     }
 
     generateItems() {
