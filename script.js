@@ -35,7 +35,7 @@ const i18n = {
         start: '운동 시작',
         pause: '일시정지',
         resume: '재개',
-        stop: '중료',
+        stop: '종료',
         statusReady: '준비됐나요?',
         statusPreparing: '준비하세요!',
         statusWorkout: '시작!',
@@ -395,7 +395,6 @@ const elements = {
     langOptions: document.getElementById('langOptions'),
     themeToggle: document.getElementById('theme-toggle'),
     counter: document.getElementById('counter'),
-    statusText: document.getElementById('status-text'),
     startBtn: document.getElementById('startBtn'),
     activeBtns: document.getElementById('activeBtns'),
     pauseBtn: document.getElementById('pauseBtn'),
@@ -527,8 +526,6 @@ function updateUI() {
     document.getElementById('unit-beeps').innerText = data.unitCount;
     document.getElementById('unit-goal').innerText = data.unitReps;
 
-    elements.statusText.innerText = data[state.statusKey];
-
     // Synchronize Iframe
     syncIframe();
 
@@ -593,7 +590,6 @@ function startWorkout() {
     
     let prepCount = state.readyTime;
     state.statusKey = 'statusPreparing';
-    elements.statusText.innerText = i18n[state.lang].statusPreparing;
     elements.counter.innerText = prepCount;
     elements.mainContainer.classList.add('counting-down');
     
@@ -624,7 +620,6 @@ function startWorkout() {
 
 function runWorkoutLoop() {
     state.statusKey = 'statusWorkout';
-    elements.statusText.innerText = i18n[state.lang].statusWorkout;
     elements.counter.innerText = "0";
     setProgress(0);
 
@@ -678,7 +673,6 @@ function stopWorkout() {
     
     elements.startBtn.classList.remove('hidden');
     elements.activeBtns.classList.add('hidden');
-    elements.statusText.innerText = i18n[state.lang].statusStopped;
     elements.counter.innerText = "0";
     setProgress(0);
     elements.mainContainer.classList.remove('counting-down');
@@ -687,7 +681,6 @@ function stopWorkout() {
 function finishWorkout() {
     stopWorkout();
     state.statusKey = 'statusFinished';
-    elements.statusText.innerText = i18n[state.lang].statusFinished;
     stateTransitionBeep();
 }
 
