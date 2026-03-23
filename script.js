@@ -143,11 +143,11 @@ class WheelPicker {
         this.addEventListeners();
         // Delay initial render to ensure container height is available
         setTimeout(() => {
-            if (this.items.length > 0) this.itemHeight = this.items[0].offsetHeight || 30;
+            if (this.items.length > 0) this.itemHeight = this.items[0].getBoundingClientRect().height || 30;
             this.scrollToValue(this.value, false);
-        }, 0);
+        }, 50);
         window.addEventListener('resize', () => {
-             if (this.items.length > 0) this.itemHeight = this.items[0].offsetHeight || 30;
+             if (this.items.length > 0) this.itemHeight = this.items[0].getBoundingClientRect().height || 30;
              this.render();
         });
     }
@@ -178,7 +178,7 @@ class WheelPicker {
     }
 
     render() {
-        const centerOffset = (this.container.offsetHeight / 2) - (this.itemHeight / 2);
+        const centerOffset = (this.container.getBoundingClientRect().height / 2) - (this.itemHeight / 2);
         this.translateY = centerOffset - (this.getScrollIndexByValue(this.value) * this.itemHeight);
         this.scroller.style.transform = `translateY(${this.translateY}px)`;
         this.updateItemStyles();
@@ -204,7 +204,7 @@ class WheelPicker {
     }
 
     updateItemStyles() {
-        const centerOffset = (this.container.offsetHeight / 2) - (this.itemHeight / 2);
+        const centerOffset = (this.container.getBoundingClientRect().height / 2) - (this.itemHeight / 2);
         const relativeScroll = -(this.translateY - centerOffset);
         
         this.items.forEach((item, index) => {
@@ -236,7 +236,7 @@ class WheelPicker {
         if (this.isLoop) {
             const originalCount = this.items.length - (2 * this.cloneCount);
             const totalHeight = originalCount * this.itemHeight;
-            const centerOffset = (this.container.offsetHeight / 2) - (this.itemHeight / 2);
+            const centerOffset = (this.container.getBoundingClientRect().height / 2) - (this.itemHeight / 2);
             
             const minBound = centerOffset - (this.items.length - this.cloneCount) * this.itemHeight;
             const maxBound = centerOffset - (this.cloneCount - 1) * this.itemHeight;
@@ -323,7 +323,7 @@ class WheelPicker {
     }
 
     snap() {
-        const centerOffset = (this.container.offsetHeight / 2) - (this.itemHeight / 2);
+        const centerOffset = (this.container.getBoundingClientRect().height / 2) - (this.itemHeight / 2);
         const index = Math.round((centerOffset - this.translateY) / this.itemHeight);
         const clampedIndex = Math.max(0, Math.min(this.items.length - 1, index));
         const item = this.items[clampedIndex];
