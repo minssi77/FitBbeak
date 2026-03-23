@@ -401,32 +401,8 @@ const elements = {
     stopBtn: document.getElementById('stopBtn'),
     mainContainer: document.getElementById('main-container'),
     flashOverlay: document.getElementById('flash-overlay'),
-    progressRing: document.querySelector('.progress-ring__circle'),
-    explanationFrame: document.getElementById('explanation-frame')
+    progressRing: document.querySelector('.progress-ring__circle')
 };
-
-// Iframe Communication
-function syncIframe() {
-    if (!elements.explanationFrame || !elements.explanationFrame.contentWindow) return;
-    
-    // Send Theme
-    elements.explanationFrame.contentWindow.postMessage({
-        type: 'THEME_UPDATE',
-        isDark: state.theme === 'dark'
-    }, '*');
-
-    // Send I18N
-    elements.explanationFrame.contentWindow.postMessage({
-        type: 'I18N_UPDATE',
-        content: i18n[state.lang]
-    }, '*');
-}
-
-window.addEventListener('message', (event) => {
-    if (event.data.type === 'READY') {
-        syncIframe();
-    }
-});
 
 // Picker Instances
 let pickers = {};
@@ -526,9 +502,6 @@ function updateUI() {
     document.getElementById('unit-beeps').innerText = data.unitCount;
     document.getElementById('unit-goal').innerText = data.unitReps;
 
-    // Synchronize Iframe
-    syncIframe();
-
     // New: Units
     document.getElementById('unit-ready').innerText = data.unitSec;
     document.getElementById('unit-interval').innerText = data.unitSec;
@@ -537,9 +510,6 @@ function updateUI() {
 
     // Theme
     elements.body.className = state.theme === 'dark' ? 'dark-mode' : '';
-    
-    // Update Iframe Theme (extra safety)
-    syncIframe();
 }
 
 // Actions
