@@ -92,7 +92,7 @@ body {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* controls sit on the right */
+    justify-content: space-between; /* left on left, right on right */
     margin-bottom: clamp(10px, 3vh, 24px);
 }
 
@@ -111,6 +111,11 @@ h1 {
     text-align: center;
     white-space: nowrap;
     pointer-events: none;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
 }
 
 .header-controls {
