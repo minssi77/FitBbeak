@@ -472,9 +472,8 @@ function countdownBeep(isHigh) {
 function tempoBeep(isRepComplete) {
     const freq = isRepComplete ? 1200 : 600;
     const type = isRepComplete ? 'triangle' : 'sine';
-    let volume = isRepComplete ? 0.5 : 0.4;
-    // 템포 비프 볼륨 50% 상향
-    volume = Math.min(1.0, volume * 1.5);
+    // 템포 비프 볼륨 추가 상향
+    let volume = isRepComplete ? 0.9 : 0.7;
     const duration = isRepComplete ? 0.2 : 0.1;
     playSound(freq, duration, volume, type);
 }
