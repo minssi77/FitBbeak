@@ -441,9 +441,6 @@ function playSound(freq, duration = 0.1, volume = 0.5, type = 'sine') {
     if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (state.audioCtx.state === 'suspended') state.audioCtx.resume();
 
-    // Increase beep volume by 50%
-    volume = Math.min(1.0, volume * 1.5);
-
     const now = state.audioCtx.currentTime;
     const osc = state.audioCtx.createOscillator();
     const gain = state.audioCtx.createGain();
@@ -466,44 +463,25 @@ function playSound(freq, duration = 0.1, volume = 0.5, type = 'sine') {
     elements.flashOverlay.classList.add('flash-active');
 }
 
-let speechVoices = [];
-if ('speechSynthesis' in window) {
-    const updateVoices = () => { speechVoices = window.speechSynthesis.getVoices(); };
-    window.speechSynthesis.onvoiceschanged = updateVoices;
-    updateVoices();
+function countdownBeep(isHigh) {
+    const freq = isHigh ? 800 : 440;
+    const volume = isHigh ? 0.5 : 0.3;
+    playSound(freq, 0.1, volume, 'square');
 }
 
-function speak(text) {
-    if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel(); // Prevent overlapping
-    
-    const utterance = new SpeechSynthesisUtterance(text);
-    const langMap = {
-        'ko': 'ko-KR',
-        'en': 'en-US',
-        'de': 'de-DE',
-        'es': 'es-ES'
-    };
-    const targetLang = langMap[state.lang] || 'en-US';
-    utterance.lang = targetLang;
-    
-    if (speechVoices.length > 0) {
-        const langCode = targetLang.split('-')[0];
-        const available = speechVoices.filter(v => v.lang.startsWith(langCode));
-        
-        if (available.length > 0) {
-            // Priority given to known high-quality female voices on macOS/Windows/Mobile
-            const femaleNames = ['yuna', 'sora', 'samantha', 'victoria', 'zira', 'karen', 'anna', 'monica', 'paulina', 'female', 'google'];
-            let selectedVoice = available.find(v => femaleNames.some(name => v.name.toLowerCase().includes(name)));
-            
-            utterance.voice = selectedVoice || available[0];
-        }
-    }
-    
-    // Slightly higher pitch generally sounds softer and more pleasant
-    utterance.pitch = 1.1;
-    
-    window.speechSynthesis.speak(utterance);
+function tempoBeep(isRepComplete) {
+    const freq = isRepComplete ? 1200 : 600;
+    const type = isRepComplete ? 'triangle' : 'sine';
+    let volume = isRepComplete ? 0.5 : 0.4;
+    // 템포 비프 볼륨 50% 상향
+    volume = Math.min(1.0, volume * 1.5);
+    const duration = isRepComplete ? 0.2 : 0.1;
+    playSound(freq, duration, volume, type);
+}
+
+function stateTransitionBeep() {
+    // 800Hz 주파수의 0.5초 길이 비프음 (길고 묵직한 신호음)
+    playSound(800, 0.5, 0.7, 'sine');
 }
 
 // UI Updates
@@ -595,7 +573,7 @@ function startWorkout() {
     elements.mainContainer.classList.add('counting-down');
     
     // Initial beep
-    playSound(prepCount <= 3 ? 800 : 440, 0.1, prepCount <= 3 ? 0.5 : 0.3, 'square');
+    countdownBeep(prepCount <= 3);
 
     state.countdownTimer = setInterval(() => {
         if (state.isPaused) return;
@@ -603,7 +581,7 @@ function startWorkout() {
         if (prepCount > 0) {
             elements.counter.innerText = prepCount;
             // Short beep at 3, 2, 1
-            playSound(prepCount <= 3 ? 800 : 440, 0.1, prepCount <= 3 ? 0.5 : 0.3, 'square');
+            countdownBeep(prepCount <= 3);
             setProgress(( (state.readyTime - prepCount) / state.readyTime) * 100);
             
             if (prepCount <= 3) {
@@ -613,8 +591,7 @@ function startWorkout() {
         } else {
             clearInterval(state.countdownTimer);
             elements.mainContainer.classList.remove('counting-down');
-            playSound(1000, 0.6, 0.7, 'sine'); // Long beep for start
-            speak(i18n[state.lang].speechStart);
+            stateTransitionBeep();
             runWorkoutLoop();
         }
     }, 1000);
@@ -640,7 +617,7 @@ function runWorkoutLoop() {
             state.currentCount++;
             state.currentBeep = 0;
             elements.counter.innerText = state.currentCount;
-            playSound(1200, 0.2, 0.5, 'triangle'); // Rep complete
+            tempoBeep(true); // Rep complete
             
             // Visual feedback
             elements.counter.style.transform = "scale(1.2)";
@@ -650,7 +627,7 @@ function runWorkoutLoop() {
                 finishWorkout();
             }
         } else {
-            playSound(600, 0.1, 0.4, 'sine'); // Normal beep
+            tempoBeep(false); // Normal beep
         }
     }, ms);
 }
@@ -664,17 +641,10 @@ function pauseWorkout() {
     state.isPaused = !state.isPaused;
     elements.pauseBtn.innerText = state.isPaused ? i18n[state.lang].resume : i18n[state.lang].pause;
     
-    if (state.isPaused) {
-        playSound(900, 0.6, 0.7, 'sine'); // Long beep for rest
-        speak(i18n[state.lang].speechRest);
-    } else {
-        playSound(1000, 0.6, 0.7, 'sine'); // Long beep for resume/start
-        speak(i18n[state.lang].speechStart);
-    }
+    stateTransitionBeep();
 }
 
 function stopWorkout() {
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     clearInterval(state.timer);
     clearInterval(state.countdownTimer);
     state.isWorkoutRunning = false;
@@ -693,8 +663,7 @@ function finishWorkout() {
     stopWorkout();
     state.statusKey = 'statusFinished';
     elements.statusText.innerText = i18n[state.lang].statusFinished;
-    playSound(1500, 0.8, 0.7, 'sine'); // Long beep for finish
-    speak(i18n[state.lang].speechFinished);
+    stateTransitionBeep();
 }
 
 // Event Listeners
