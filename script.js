@@ -205,8 +205,8 @@ class WheelPicker {
         for (let v = 0.1; v <= 0.8; v = parseFloat((v + 0.1).toFixed(2))) values.push(v);
         for (let v = 0.81; v <= 1.49; v = parseFloat((v + 0.01).toFixed(3))) {
             values.push(v);
-            if (v === 1.35) {
-                for (let sv = 1.351; sv <= 1.359; sv = parseFloat((sv + 0.001).toFixed(3))) {
+            if (v === 1.34) {
+                for (let sv = 1.341; sv <= 1.349; sv = parseFloat((sv + 0.001).toFixed(3))) {
                     values.push(sv);
                 }
             }
@@ -531,16 +531,16 @@ function adjustValue(id, dir) {
     let val = picker.value;
     let step = picker.step;
     
-    // Original step logic with 0.001 extension for 1.351~1.359
+    // Original step logic with 0.001 extension for 1.341~1.349
     if (id === 'interval') {
         if (dir === 1) { // Increasing
-            if (val >= 1.3495 && val < 1.3595) step = 0.001;
+            if (val >= 1.3395 && val < 1.3495) step = 0.001;
             else if (val < 0.795) step = 0.1;
             else if (val >= 0.795 && val < 1.495) step = 0.01;
             else if (val >= 1.495 && val < 2.495) step = 0.1;
             else step = 0.5;
         } else { // Decreasing
-            if (val > 1.3505 && val <= 1.3605) step = 0.001;
+            if (val > 1.3405 && val <= 1.3505) step = 0.001;
             else if (val <= 0.805) step = 0.1;
             else if (val > 0.805 && val <= 1.505) step = 0.01;
             else if (val > 1.505 && val <= 2.505) step = 0.1;
