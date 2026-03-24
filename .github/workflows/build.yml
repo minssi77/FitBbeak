@@ -18,7 +18,7 @@ jobs:
     - run: |
         npm install
         mkdir -p www
-        cp *.html *.js *.css 2>/dev/null || :
+        cp *.html *.js *.css www/ 2>/dev/null || :
         npx cap sync android
 
     - name: 3. 자바(Java) 21 환경 세팅
