@@ -1,0 +1,28 @@
+{
+  "name": "fitbbeak",
+  "version": "1.0.0",
+  "description": "> **\"숫자는 핏삑이 셀게요, 당신은 동작에만 집중하세요.\"**   > **\"FitBbeak counts the reps; you just focus on the movement.\"**",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/minssi77/FitBbeak.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/minssi77/FitBbeak/issues"
+  },
+  "homepage": "https://github.com/minssi77/FitBbeak#readme",
+  "dependencies": {
+    "@capacitor/android": "^8.2.0",
+    "@capacitor/core": "^8.2.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.2.0"
+  }
+}
