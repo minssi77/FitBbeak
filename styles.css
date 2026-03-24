@@ -1,6 +1,6 @@
 :root {
-  --safe-top: env(safe-area-inset-top);
-  --safe-bottom: env(safe-area-inset-bottom);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 
     --primary: #3498db;
     --primary-glow: rgba(52, 152, 219, 0.4);
