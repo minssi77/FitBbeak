@@ -1,4 +1,7 @@
 :root {
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+
     --primary: #3498db;
     --primary-glow: rgba(52, 152, 219, 0.4);
     --secondary: #9b59b6;
@@ -42,7 +45,8 @@ body {
     min-height: 100dvh;
     width: 100vw;
     overflow-x: hidden;
-    padding: 0;
+    padding-top: var(--safe-top);
+    padding-bottom: var(--safe-bottom);
 }
 
 /* On wide screens, show a subtle grid pattern behind the card */
