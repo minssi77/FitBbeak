@@ -176,7 +176,7 @@ class WheelPicker {
         renderValues.forEach(v => {
             const item = document.createElement('div');
             item.className = 'wheel-item';
-            item.innerText = v;
+            item.innerText = (this.id === 'interval' && v >= 0.81 && v <= 1.49) ? v.toFixed(2) : v;
             item.dataset.value = v;
             this.scroller.appendChild(item);
             this.items.push(item);
@@ -369,7 +369,7 @@ class WheelPicker {
 
 // State Management
 let state = {
-    lang: localStorage.getItem('fitbbeak_lang') || 'en',
+    lang: localStorage.getItem('fitbbeak_lang') || 'ko',
     theme: localStorage.getItem('fitbbeak_theme') || 'dark',
     isWorkoutRunning: false,
     isPaused: false,
