@@ -751,14 +751,21 @@ initPickers();
 updateUI();
 setProgress(0);
 
-// 버튼누름님에게 메일 전송하는 함수
+// 환경에 맞춰 메일을 전송하는 완성형 함수
 function sendEmail() {
   const email = "ButtonNureum@gmail.com";
-  // 제목: [핏삑/FitBbeak] 코드 구매 및 협업 문의
   const subject = encodeURIComponent("[핏삑/FitBbeak] 코드 구매 및 협업 문의");
-  // 본문: 안녕하세요, '버튼누름'님. ...
   const body = encodeURIComponent("안녕하세요, '버튼누름'님.\n\n핏삑(FitBbeak) 앱의 소스 코드 구매 및 비즈니스 협업에 대해 문의드립니다.");
-  
-  // 시스템 기본 메일 앱 실행
-  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  const mailUrl = `mailto:${email}?subject=${subject}&body=${body}`;
+
+  // 1. 안드로이드/iOS 설치형 앱(Capacitor) 환경인지 확인
+  const isApp = window.location.protocol === 'capacitor:' || window.location.protocol === 'http:' && window.Capacitor;
+
+  if (isApp) {
+    // 앱 환경: 시스템 앱을 강제로 깨우기 위해 _system 사용
+    window.open(mailUrl, '_system');
+  } else {
+    // PC 및 모바일 웹 브라우저 환경: 새 창 없이 현재 페이지에서 메일 앱 호출
+    window.location.href = mailUrl;
+  }
 }
