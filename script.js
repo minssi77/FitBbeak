@@ -1,4 +1,4 @@
-/* Copyright 2026 NUREUM Labs (JIHO MIN). All rights reserved. */
+/* Copyright 2026 NUREUM Labs (JIHO MIN). All rights reserved. ButtonNureum@gmail.com */
 (function() {
     'use strict';
     console.log('Protected by NUREUM Labs');
