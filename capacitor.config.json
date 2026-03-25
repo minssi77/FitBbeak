@@ -1,5 +1,13 @@
 {
   "appId": "com.fitbbeak.app",
   "appName": "FitBbeak",
-  "webDir": "www"
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "plugins": {
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#ffffff",
+      "overlaysWebView": false
+    }
+  }
 }

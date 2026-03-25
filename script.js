@@ -367,6 +367,52 @@ class WheelPicker {
     }
 }
 
+// Screen Wake Lock API
+let wakeLock = null;
+
+const keepScreenOn = async () => {
+    // 1. Web WakeLock API (Standard Web)
+    try {
+        if ('wakeLock' in navigator) {
+            wakeLock = await navigator.wakeLock.request('screen');
+            console.log('화면 꺼짐 방지 활성화');
+        }
+    } catch (err) {
+        console.error(`${err.name}, ${err.message}`);
+    }
+
+    // 2. Capacitor Plugin (Native/Hybrid)
+    try {
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.KeepAwake) {
+            await window.Capacitor.Plugins.KeepAwake.keepAwake();
+        }
+    } catch (err) {
+        console.error(`Capacitor KeepAwake Error: ${err.message}`);
+    }
+};
+
+const allowScreenOff = async () => {
+    // 1. Web WakeLock API (Standard Web)
+    if (wakeLock !== null) {
+        try {
+            await wakeLock.release();
+            wakeLock = null;
+            console.log('화면 꺼짐 방지 해제 (이제 30초 뒤 꺼짐)');
+        } catch (err) {
+            console.error(`${err.name}, ${err.message}`);
+        }
+    }
+
+    // 2. Capacitor Plugin (Native/Hybrid)
+    try {
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.KeepAwake) {
+            await window.Capacitor.Plugins.KeepAwake.allowSleep();
+        }
+    } catch (err) {
+        console.error(`Capacitor KeepAwake Error: ${err.message}`);
+    }
+};
+
 // State Management
 let state = {
     lang: localStorage.getItem('fitbbeak_lang') || 'ko',
@@ -546,6 +592,8 @@ function adjustValue(id, dir) {
 }
 
 function startWorkout() {
+    keepScreenOn();
+
     state.isWorkoutRunning = true;
     state.isPaused = false;
     state.currentCount = 0;
@@ -631,6 +679,13 @@ function pauseWorkout() {
     state.isPaused = !state.isPaused;
     elements.pauseBtn.innerText = state.isPaused ? i18n[state.lang].resume : i18n[state.lang].pause;
     
+    // 일시정지 시 화면 잠금 해제, 재개 시 잠금 활성화
+    if (state.isPaused) {
+        allowScreenOff();
+    } else {
+        keepScreenOn();
+    }
+    
     stateTransitionBeep();
 }
 
@@ -640,6 +695,8 @@ function stopWorkout() {
     state.isWorkoutRunning = false;
     state.isPaused = false;
     state.statusKey = 'statusStopped';
+    
+    allowScreenOff();
     
     elements.startBtn.classList.remove('hidden');
     elements.activeBtns.classList.add('hidden');

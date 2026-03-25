@@ -1,6 +1,8 @@
 :root {
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  /* 상단 상태 바 여백 */
+  --safe-area-inset-top: env(safe-area-inset-top);
+  /* 하단 내비게이션 바 여백 */
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
 
     --primary: #3498db;
     --primary-glow: rgba(52, 152, 219, 0.4);
@@ -33,7 +35,7 @@ body.dark-mode {
 }
 
 /* Mobile-first: full height, centered, min scrolling */
-body {
+html, body {
     font-family: 'Outfit', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-main);
@@ -42,11 +44,12 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100dvh;
+    height: 100%; /* 화면 높이를 100%로 고정 */
     width: 100vw;
-    overflow-x: hidden;
-    padding-top: var(--safe-top);
-    padding-bottom: var(--safe-bottom);
+    overflow: hidden; /* 전체 페이지 스크롤을 방지합니다. */
+    /* 안전 영역만큼 여백을 추가합니다. */
+    padding-top: var(--safe-area-inset-top);
+    padding-bottom: var(--safe-area-inset-bottom);
 }
 
 /* On wide screens, show a subtle grid pattern behind the card */
