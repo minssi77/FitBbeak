@@ -222,7 +222,7 @@
     };
 
     function _0x_av(i, d) {
-        const p = _0x_pks[i]; let v = p.value, s = p.step;
+        const p = _0x_pks[i]; let v = p.val, s = p.stp;
         if (i === 'interval') { if (d === 1) s = (v < 0.795) ? 0.1 : (v < 1.495) ? 0.01 : (v < 2.495) ? 0.1 : 0.5; else s = (v <= 0.805) ? 0.1 : (v <= 1.505) ? 0.01 : (v <= 2.505) ? 0.1 : 0.5; }
         v = parseFloat((v + (s * d)).toFixed(i === 'interval' ? 2 : 0)); p.set(v);
     }
