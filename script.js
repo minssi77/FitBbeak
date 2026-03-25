@@ -375,7 +375,6 @@ const keepScreenOn = async () => {
     try {
         if ('wakeLock' in navigator) {
             wakeLock = await navigator.wakeLock.request('screen');
-            console.log('화면 꺼짐 방지 활성화');
         }
     } catch (err) {
         console.error(`${err.name}, ${err.message}`);
@@ -397,7 +396,6 @@ const allowScreenOff = async () => {
         try {
             await wakeLock.release();
             wakeLock = null;
-            console.log('화면 꺼짐 방지 해제 (이제 30초 뒤 꺼짐)');
         } catch (err) {
             console.error(`${err.name}, ${err.message}`);
         }
@@ -543,12 +541,6 @@ function updateUI() {
     elements.pauseBtn.innerText = state.isPaused ? data.resume : data.pause;
     
     // Units
-    document.getElementById('unit-ready').innerText = data.unitSec;
-    document.getElementById('unit-interval').innerText = data.unitSec;
-    document.getElementById('unit-beeps').innerText = data.unitCount;
-    document.getElementById('unit-goal').innerText = data.unitReps;
-
-    // New: Units
     document.getElementById('unit-ready').innerText = data.unitSec;
     document.getElementById('unit-interval').innerText = data.unitSec;
     document.getElementById('unit-beeps').innerText = data.unitCount;
