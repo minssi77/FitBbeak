@@ -1,771 +1,295 @@
-const i18n = {
-    en: {
-        brand: 'FitBbeak',
-        labelReady: 'Ready Time',
-        labelInterval: 'Interval',
-        labelBeeps: 'Beeps/Rep',
-        labelGoal: 'Goal Reps',
-        start: 'START WORKOUT',
-        pause: 'PAUSE',
-        resume: 'RESUME',
-        stop: 'STOP',
-        statusReady: 'Ready?',
-        statusPreparing: 'Prepare!',
-        statusWorkout: 'GO!',
-        statusFinished: 'Done!',
-        statusStopped: 'Stopped',
-        guideTitle: 'Why Workout Tempo Matters?',
-        guideContent: '<p>Maintaining a consistent tempo during exercises like squats and push-ups is crucial for maximizing muscle growth and minimizing the risk of injury. <strong>FitBbeak</strong> helps you focus purely on your movement by providing precise auditory signals.</p><p>The science of "Time Under Tension" (TUT) shows that controlled repetitions lead to better neuromuscular adaptation. By setting your ideal interval with <strong>FitBbeak</strong>, you can ensure every rep counts.</p>',
-        privacy: 'Privacy Policy',
-        terms: 'Terms of Service',
-        support: 'Support (Toss Me)',
-        unitSec: 'sec',
-        unitCount: 'count',
-        unitReps: 'reps',
-        speechStart: 'Start',
-        speechRest: 'Rest',
-        speechFinished: 'Great job'
-    },
-    ko: {
-        brand: '핏삑',
-        labelReady: '준비 시간',
-        labelInterval: '신호 간격',
-        labelBeeps: '카운트당 삑',
-        labelGoal: '목표 횟수',
-        start: '운동 시작',
-        pause: '일시정지',
-        resume: '재개',
-        stop: '종료',
-        statusReady: '준비됐나요?',
-        statusPreparing: '준비하세요!',
-        statusWorkout: '시작!',
-        statusFinished: '달성!',
-        statusStopped: '중단됨',
-        guideTitle: '운동 템포가 왜 중요한가요?',
-        guideContent: '<p>스쿼트와 푸시업 같은 운동에서 일정한 템포를 유지하는 것은 근성장을 극대화하고 부상 위험을 최소화하는 데 매우 중요합니다. <strong>핏삑</strong>은 정확한 청각 신호를 제공하여 오직 동작에만 집중할 수 있도록 돕습니다.</p><p>긴장 상태 유지 시간(TUT) 이론에 따르면 통제된 반복 동작은 더 나은 신경근 적응을 이끌어냅니다. <strong>핏삑</strong>으로 이상적인 간격을 설정하여 매 순간의 효율을 높여보세요.</p>',
-        privacy: '개인정보 처리방침',
-        terms: '이용약관',
-        support: '후원하기 (Toss Me)',
-        unitSec: '초',
-        unitCount: '회',
-        unitReps: '개',
-        speechStart: '시작',
-        speechRest: '휴식',
-        speechFinished: '수고하셨습니다'
-    },
-    de: {
-        brand: 'FitBbeak',
-        labelReady: 'Vorbereitung',
-        labelInterval: 'Intervall',
-        labelBeeps: 'Pieptöne/Wdh.',
-        labelGoal: 'Ziel Wdh.',
-        start: 'STARTEN',
-        pause: 'PAUSE',
-        resume: 'WEITER',
-        stop: 'STOPP',
-        statusReady: 'Bereit?',
-        statusPreparing: 'Fertig machen!',
-        statusWorkout: 'LOS!',
-        statusFinished: 'Fertig!',
-        statusStopped: 'Gestoppt',
-        guideTitle: 'Warum das Workout-Tempo wichtig ist',
-        guideContent: '<p>Ein konstantes Tempo bei Übungen like squats and push-ups is crucial. <strong>FitBbeak</strong> helps you focus through precise acoustic signals.</p>',
-        privacy: 'Datenschutz',
-        terms: 'AGB',
-        support: 'Support (Toss Me)',
-        unitSec: 'Sek',
-        unitCount: 'Zähl',
-        unitReps: 'Wdh',
-        speechStart: 'Start',
-        speechRest: 'Pause',
-        speechFinished: 'Gut gemacht'
-    },
-    es: {
-        brand: 'FitBbeak',
-        labelReady: 'Preparación',
-        labelInterval: 'Intervalo',
-        labelBeeps: 'Pitidos/Rep',
-        labelGoal: 'Meta Reps',
-        start: 'EMPEZAR',
-        pause: 'PAUSA',
-        resume: 'REANUDAR',
-        stop: 'PARAR',
-        statusReady: '¿Listo?',
-        statusPreparing: '¡Prepárate!',
-        statusWorkout: '¡VAMOS!',
-        statusFinished: '¡Meta!',
-        statusStopped: 'Detenido',
-        guideTitle: '¿Por qué importa el ritmo?',
-        guideContent: '<p>Mantener un ritmo constante ayuda a maximizar el crecimiento muscular. <strong>FitBbeak</strong> te ayuda con señales auditivas precisas.</p>',
-        privacy: 'Privacidad',
-        terms: 'Términos',
-        support: 'Apoyar (Toss Me)',
-        unitSec: 'seg',
-        unitCount: 'cont',
-        unitReps: 'reps',
-        speechStart: 'Inicio',
-        speechRest: 'Descanso',
-        speechFinished: 'Buen trabajo'
-    }
-};
+/* Copyright 2026 NUREUM Labs (JIHO MIN). All rights reserved. */
+(function() {
+    'use strict';
+    console.log('Protected by NUREUM Labs');
 
-/**
- * Hybrid Wheel Picker Class
- * Handles 3D rotation, snapping, and direct input mode.
- */
-class WheelPicker {
-    constructor(id, min, max, step, initialValue, onUpdate, isLoop = true) {
-        this.id = id;
-        this.container = document.querySelector(`.number-control[data-target="${id}"] .wheel-picker`);
-        this.scroller = this.container.querySelector('.wheel-scroller');
-        this.input = this.container.querySelector('.wheel-input');
-        this.viewport = this.container.querySelector('.wheel-viewport');
-        this.min = min;
-        this.max = max;
-        this.step = step;
-        this.value = initialValue;
-        this.onUpdate = onUpdate;
-        this.isLoop = isLoop;
-        this.cloneCount = 5;
-        
-        this.itemHeight = 30;
-        this.items = [];
-        this.startY = 0;
-        this.translateY = 0;
-        this.startTranslateY = 0;
-        this.wheelTimeout = null;
+    const FitBbeak_i18n = {
+        en: { brand: 'FitBbeak', labelReady: 'Ready Time', labelInterval: 'Interval', labelBeeps: 'Beeps/Rep', labelGoal: 'Goal Reps', start: 'START WORKOUT', pause: 'PAUSE', resume: 'RESUME', stop: 'STOP', statusReady: 'Ready?', statusPreparing: 'Prepare!', statusWorkout: 'GO!', statusFinished: 'Done!', statusStopped: 'Stopped', guideTitle: 'Why Workout Tempo Matters?', guideContent: '<p>...</p>', privacy: 'Privacy Policy', terms: 'Terms of Service', support: 'Support (Toss Me)', unitSec: 'sec', unitCount: 'count', unitReps: 'reps', speechStart: 'Start', speechRest: 'Rest', speechFinished: 'Great job' },
+        ko: { brand: '핏삑', labelReady: '준비 시간', labelInterval: '신호 간격', labelBeeps: '카운트당 삑', labelGoal: '목표 횟수', start: '운동 시작', pause: '일시정지', resume: '재개', stop: '종료', statusReady: '준비됐나요?', statusPreparing: '준비하세요!', statusWorkout: '시작!', statusFinished: '달성!', statusStopped: '중단됨', guideTitle: '운동 템포가 왜 중요한가요?', guideContent: '<p>...</p>', privacy: '개인정보 처리방침', terms: '이용약관', support: '후원하기 (Toss Me)', unitSec: '초', unitCount: '회', unitReps: '개', speechStart: '시작', speechRest: '휴식', speechFinished: '수고하셨습니다' },
+        de: { brand: 'FitBbeak', labelReady: 'Vorbereitung', labelInterval: 'Intervall', labelBeeps: 'Pieptöne/Wdh.', labelGoal: 'Ziel Wdh.', start: 'STARTEN', pause: 'PAUSE', resume: 'WEITER', stop: 'STOPP', statusReady: 'Bereit?', statusPreparing: 'Fertig machen!', statusWorkout: 'LOS!', statusFinished: 'Fertig!', statusStopped: 'Gestoppt', guideTitle: 'Warum das Workout-Tempo wichtig ist', guideContent: '<p>...</p>', privacy: 'Datenschutz', terms: 'AGB', support: 'Support (Toss Me)', unitSec: 'Sek', unitCount: 'Zähl', unitReps: 'Wdh', speechStart: 'Start', speechRest: 'Pause', speechFinished: 'Gut gemacht' },
+        es: { brand: 'FitBbeak', labelReady: 'Preparación', labelInterval: 'Intervalo', labelBeeps: 'Pitidos/Rep', labelGoal: 'Meta Reps', start: 'EMPEZAR', pause: 'PAUSA', resume: 'REANUDAR', stop: 'PARAR', statusReady: '¿Listo?', statusPreparing: '¡Prepárate!', statusWorkout: '¡VAMOS!', statusFinished: '¡Meta!', statusStopped: 'Detenido', guideTitle: '¿Por qué importa el ritmo?', guideContent: '<p>...</p>', privacy: 'Privacidad', terms: 'Términos', support: 'Apoyar (Toss Me)', unitSec: 'seg', unitCount: 'cont', unitReps: 'reps', speechStart: 'Inicio', speechRest: 'Descanso', speechFinished: 'Buen trabajo' }
+    };
 
-        this.init();
-    }
-
-    init() {
-        this.generateItems();
-        this.addEventListeners();
-        // Delay initial render to ensure container height is available
-        setTimeout(() => {
-            if (this.items.length > 0) {
-                const h = parseFloat(window.getComputedStyle(this.items[0]).height);
-                this.itemHeight = h > 0 ? h : 30;
+    class FitBbeak_Picker {
+        constructor(a, b, c, d, e, f, g = true) {
+            this.id = a;
+            this.cnt = document.querySelector(`.number-control[data-target="${a}"] .wheel-picker`);
+            this.scr = this.cnt.querySelector('.wheel-scroller');
+            this.inp = this.cnt.querySelector('.wheel-input');
+            this.vpt = this.cnt.querySelector('.wheel-viewport');
+            this.min = b; this.max = c; this.stp = d; this.val = e; this.upd = f; this.lp = g; this.cc = 5;
+            this.ih = 30; this.its = []; this.sy = 0; this.ty = 0; this.sty = 0; this.to = null;
+            this._i();
+        }
+        _i() {
+            this._g(); this._e();
+            setTimeout(() => {
+                if (this.its.length > 0) {
+                    const h = parseFloat(window.getComputedStyle(this.its[0]).height);
+                    this.ih = h > 0 ? h : 30;
+                }
+                this.sv(this.val, false);
+            }, 50);
+            window.addEventListener('resize', () => {
+                if (this.its.length > 0) {
+                    const h = parseFloat(window.getComputedStyle(this.its[0]).height);
+                    this.ih = h > 0 ? h : 30;
+                }
+                this.rn();
+            });
+        }
+        _g() {
+            this.scr.innerHTML = ''; this.its = [];
+            let v_s = (this.id === 'interval') ? this._gv() : [];
+            if (this.id !== 'interval') for (let v = this.min; v <= this.max; v = parseFloat((v + this.stp).toFixed(2))) v_s.push(v);
+            const r_v = this.lp ? [...v_s.slice(-this.cc), ...v_s, ...v_s.slice(0, this.cc)] : v_s;
+            r_v.forEach(v => {
+                const i = document.createElement('div');
+                i.className = 'wheel-item';
+                i.innerText = (this.id === 'interval' && v >= 0.81 && v <= 1.49) ? v.toFixed(2) : v;
+                i.dataset.value = v;
+                this.scr.appendChild(i); this.its.push(i);
+            });
+        }
+        rn() {
+            const co = (this.cnt.getBoundingClientRect().height / 2) - (this.ih / 2);
+            this.ty = co - (this._gi(this.val) * this.ih);
+            this.scr.style.transform = `translateY(${this.ty}px)`;
+            this._us();
+        }
+        _gi(v) {
+            if (this.id === 'interval') {
+                const v_s = this._gv();
+                const bi = v_s.indexOf(v);
+                return this.lp ? bi + this.cc : bi;
             }
-            this.scrollToValue(this.value, false);
-        }, 50);
-        window.addEventListener('resize', () => {
-             if (this.items.length > 0) {
-                 const h = parseFloat(window.getComputedStyle(this.items[0]).height);
-                 this.itemHeight = h > 0 ? h : 30;
-             }
-             this.render();
+            const bi = Math.round((v - this.min) / this.stp);
+            return this.lp ? bi + this.cc : bi;
+        }
+        _gv() {
+            let v = [];
+            for (let i = 0.1; i <= 0.8; i = parseFloat((i + 0.1).toFixed(2))) v.push(i);
+            for (let i = 0.81; i <= 1.49; i = parseFloat((i + 0.01).toFixed(2))) v.push(i);
+            for (let i = 1.5; i <= 2.5; i = parseFloat((i + 0.1).toFixed(2))) v.push(i);
+            for (let i = 3.0; i <= 5.0; i = parseFloat((i + 0.5).toFixed(2))) v.push(i);
+            return v;
+        }
+        _us() {
+            const co = (this.cnt.getBoundingClientRect().height / 2) - (this.ih / 2);
+            const rs = -(this.ty - co);
+            this.its.forEach((i, idx) => {
+                const ip = idx * this.ih;
+                const d = Math.abs(rs - ip);
+                i.classList.remove('active', 'nearby', 'far');
+                if (d < this.ih * 0.4) i.classList.add('active');
+                else if (d < this.ih * 1.2) i.classList.add('nearby');
+                else i.classList.add('far');
+                const rot = (ip - rs) / 35 * 65;
+                const s = 1 - (d / 120);
+                const z = (d < 12) ? 15 : 0;
+                i.style.transform = `rotateX(${rot}deg) scale(${s}) translateZ(${z}px)`;
+                i.style.opacity = Math.max(0.1, 1 - (d / 60));
+            });
+        }
+        _st(y) {
+            this.ty = y;
+            if (this.lp) {
+                const oc = this.its.length - (2 * this.cc);
+                const th = oc * this.ih;
+                const co = (this.cnt.getBoundingClientRect().height / 2) - (this.ih / 2);
+                const mb = co - (this.its.length - this.cc) * this.ih;
+                const max_b = co - (this.cc - 1) * this.ih;
+                if (this.ty < mb) this.ty += th;
+                if (this.ty > max_b) this.ty -= th;
+            }
+            this.scr.style.transform = `translateY(${this.ty}px)`;
+            this._us();
+        }
+        sv(v, a = true) {
+            this.val = v; this.inp.value = v;
+            this.scr.style.transition = a ? 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)' : 'none';
+            this.rn();
+        }
+        _e() {
+            let id = false;
+            const os = (y) => { id = true; this.sy = y; this.sty = this.ty; this.scr.style.transition = 'none'; this.vpt.style.cursor = 'grabbing'; };
+            const om = (y) => { if (!id) return; const dy = y - this.sy; this._st(this.sty + dy); };
+            const oe = () => { if (!id) return; id = false; this.vpt.style.cursor = 'ns-resize'; this.sn(); };
+            this.vpt.addEventListener('mousedown', e => os(e.pageY));
+            window.addEventListener('mousemove', e => om(e.pageY));
+            window.addEventListener('mouseup', oe);
+            this.vpt.addEventListener('touchstart', e => os(e.touches[0].pageY));
+            this.vpt.addEventListener('touchmove', e => { e.preventDefault(); om(e.touches[0].pageY); }, { passive: false });
+            this.vpt.addEventListener('touchend', oe);
+            this.cnt.addEventListener('wheel', e => {
+                e.preventDefault(); this.scr.style.transition = 'none'; this._st(this.ty - e.deltaY * 0.5);
+                clearTimeout(this.to); this.to = setTimeout(() => this.sn(), 150);
+            }, { passive: false });
+            this.vpt.addEventListener('click', () => { if (Math.abs(this.ty - this.sty) < 5) { this.inp.classList.remove('hidden'); this.inp.focus(); this.inp.select(); } });
+            this.inp.addEventListener('blur', () => { this.inp.classList.add('hidden'); this.set(this.inp.value); });
+            this.inp.addEventListener('keypress', e => { if (e.key === 'Enter') this.inp.blur(); });
+        }
+        sn() {
+            const co = (this.cnt.getBoundingClientRect().height / 2) - (this.ih / 2);
+            const idx = Math.max(0, Math.min(this.its.length - 1, Math.round((co - this.ty) / this.ih)));
+            this.set(parseFloat(this.its[idx].dataset.value), true);
+        }
+        _gn(r) {
+            let v = (this.id === 'interval') ? this._gv() : [];
+            if (this.id !== 'interval') for (let i = this.min; i <= this.max; i = parseFloat((i + this.stp).toFixed(2))) v.push(i);
+            if (v.length === 0) return r;
+            return v.reduce((p, c) => Math.abs(c - r) < Math.abs(p - r) ? c : p);
+        }
+        set(v, a = true) {
+            v = parseFloat(v); if (isNaN(v)) v = this.min;
+            if (this.lp) { if (v > this.max) v = this.min; else if (v < this.min) v = this.max; }
+            else v = Math.max(this.min, Math.min(this.max, v));
+            v = this._gn(v); this.val = v; this.sv(v, a);
+            if (this.upd) this.upd(v);
+        }
+    }
+
+    let _0x_lock = null;
+    const _0x_ks = async () => {
+        try { if ('wakeLock' in navigator) _0x_lock = await navigator.wakeLock.request('screen'); } catch (e) {}
+        try { if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.KeepAwake) await window.Capacitor.Plugins.KeepAwake.keepAwake(); } catch (e) {}
+    };
+    const _0x_as = async () => {
+        if (_0x_lock !== null) { try { await _0x_lock.release(); _0x_lock = null; } catch (e) {} }
+        try { if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.KeepAwake) await window.Capacitor.Plugins.KeepAwake.allowSleep(); } catch (e) {}
+    };
+
+    let NUREUM_state = {
+        l: localStorage.getItem('fb_l') || 'ko', t: localStorage.getItem('fb_t') || 'dark',
+        r: false, p: false, rt: Math.min(9, parseInt(localStorage.getItem('fb_rt')) || 5),
+        i: Math.max(0.1, Math.min(5.0, parseFloat(localStorage.getItem('fb_i')) || 1.5)),
+        b: Math.min(19, parseInt(localStorage.getItem('fb_b')) || 2), m: Math.min(199, parseInt(localStorage.getItem('fb_m')) || 20),
+        cc: 0, cb: 0, st: null, tm: null, cdt: null, ac: null, sk: 'statusReady'
+    };
+
+    const _0x_els = {
+        b: document.body, bh: document.getElementById('brand-header'), ls: document.getElementById('langSelector'),
+        lsd: document.getElementById('langSelected'), lo: document.getElementById('langOptions'), tt: document.getElementById('theme-toggle'),
+        c: document.getElementById('counter'), sb: document.getElementById('startBtn'), ab: document.getElementById('activeBtns'),
+        pb: document.getElementById('pauseBtn'), stb: document.getElementById('stopBtn'), mc: document.getElementById('main-container'),
+        fo: document.getElementById('flash-overlay'), pr: document.querySelector('.progress-ring__circle')
+    };
+
+    let _0x_pks = {};
+    function _0x_ip() {
+        _0x_pks.readyTime = new FitBbeak_Picker('readyTime', 1, 9, 1, NUREUM_state.rt, (v) => { NUREUM_state.rt = v; localStorage.setItem('fb_rt', v); }, true);
+        _0x_pks.interval = new FitBbeak_Picker('interval', 0.1, 5.0, 0.1, NUREUM_state.i, (v) => { NUREUM_state.i = v; localStorage.setItem('fb_i', v); if (NUREUM_state.r && !NUREUM_state.p) _0x_rw(); }, true, 10);
+        _0x_pks.beepsPerRep = new FitBbeak_Picker('beepsPerRep', 1, 19, 1, NUREUM_state.b, (v) => { NUREUM_state.b = v; localStorage.setItem('fb_b', v); }, true);
+        _0x_pks.maxReps = new FitBbeak_Picker('maxReps', 1, 199, 1, NUREUM_state.m, (v) => { NUREUM_state.m = v; localStorage.setItem('fb_m', v); }, true);
+    }
+
+    const _0x_rad = _0x_els.pr.r.baseVal.value;
+    const _0x_cir = _0x_rad * 2 * Math.PI;
+    _0x_els.pr.style.strokeDasharray = `${_0x_cir} ${_0x_cir}`;
+    _0x_els.pr.style.strokeDashoffset = _0x_cir;
+
+    function _0x_sp(p) { _0x_els.pr.style.strokeDashoffset = _0x_cir - (p / 100 * _0x_cir); }
+
+    function _0x_ps(f, d = 0.1, v = 0.5, t = 'sine') {
+        if (!NUREUM_state.ac) NUREUM_state.ac = new (window.AudioContext || window.webkitAudioContext)();
+        if (NUREUM_state.ac.state === 'suspended') NUREUM_state.ac.resume();
+        const n = NUREUM_state.ac.currentTime, o = NUREUM_state.ac.createOscillator(), g = NUREUM_state.ac.createGain();
+        o.type = t; o.frequency.setValueAtTime(f, n); g.gain.setValueAtTime(v, n); g.gain.exponentialRampToValueAtTime(0.01, n + d);
+        o.connect(g); g.connect(NUREUM_state.ac.destination); o.start(n); o.stop(n + d);
+        _0x_els.fo.classList.remove('flash-active'); void _0x_els.fo.offsetWidth; _0x_els.fo.classList.add('flash-active');
+    }
+
+    function _0x_cb(h) { _0x_ps(h ? 800 : 440, 0.1, h ? 0.5 : 0.3, 'square'); }
+    function _0x_tb(c) { _0x_ps(c ? 1200 : 600, c ? 0.2 : 0.1, c ? 2.0 : 1.5, c ? 'triangle' : 'sine'); }
+    function _0x_stb() { _0x_ps(800, 0.5, 0.7, 'sine'); }
+
+    function _0x_ui() {
+        const d = FitBbeak_i18n[NUREUM_state.l];
+        _0x_els.bh.innerText = d.brand;
+        document.getElementById('label-ready').innerText = d.labelReady;
+        document.getElementById('label-interval').innerText = d.labelInterval;
+        document.getElementById('label-beeps').innerText = d.labelBeeps;
+        document.getElementById('label-goal').innerText = d.labelGoal;
+        _0x_els.sb.innerText = d.start; _0x_els.stb.innerText = d.stop; _0x_els.pb.innerText = NUREUM_state.p ? d.resume : d.pause;
+        document.getElementById('unit-ready').innerText = d.unitSec; document.getElementById('unit-interval').innerText = d.unitSec;
+        document.getElementById('unit-beeps').innerText = d.unitCount; document.getElementById('unit-goal').innerText = d.unitReps;
+        _0x_els.b.className = NUREUM_state.t === 'dark' ? 'dark-mode' : '';
+    }
+
+    window.NUREUM_toggleTheme = function() {
+        NUREUM_state.t = NUREUM_state.t === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('fb_t', NUREUM_state.t); _0x_ui();
+    };
+
+    function _0x_av(i, d) {
+        const p = _0x_pks[i]; let v = p.value, s = p.step;
+        if (i === 'interval') { if (d === 1) s = (v < 0.795) ? 0.1 : (v < 1.495) ? 0.01 : (v < 2.495) ? 0.1 : 0.5; else s = (v <= 0.805) ? 0.1 : (v <= 1.505) ? 0.01 : (v <= 2.505) ? 0.1 : 0.5; }
+        v = parseFloat((v + (s * d)).toFixed(i === 'interval' ? 2 : 0)); p.set(v);
+    }
+
+    window.FitBbeak_startWorkout = function() {
+        _0x_ks(); NUREUM_state.r = true; NUREUM_state.p = false; NUREUM_state.cc = 0; NUREUM_state.cb = 0;
+        if (!NUREUM_state.ac) NUREUM_state.ac = new (window.AudioContext || window.webkitAudioContext)();
+        if (NUREUM_state.ac.state === 'suspended') NUREUM_state.ac.resume();
+        _0x_els.sb.classList.add('hidden'); _0x_els.ab.classList.remove('hidden');
+        let pc = NUREUM_state.rt; NUREUM_state.sk = 'statusPreparing'; _0x_els.c.innerText = pc; _0x_els.mc.classList.add('counting-down'); _0x_cb(pc <= 3);
+        NUREUM_state.cdt = setInterval(() => {
+            if (NUREUM_state.p) return; pc--;
+            if (pc > 0) {
+                _0x_els.c.innerText = pc; _0x_cb(pc <= 3); _0x_sp(((NUREUM_state.rt - pc) / NUREUM_state.rt) * 100);
+                if (pc <= 3) { _0x_els.c.style.transform = "scale(1.2)"; setTimeout(() => _0x_els.c.style.transform = "scale(1)", 100); }
+            } else { clearInterval(NUREUM_state.cdt); _0x_els.mc.classList.remove('counting-down'); _0x_stb(); _0x_run(); }
+        }, 1000);
+    };
+
+    function _0x_run() {
+        NUREUM_state.sk = 'statusWorkout'; _0x_els.c.innerText = "0"; _0x_sp(0);
+        NUREUM_state.tm = setInterval(() => {
+            if (NUREUM_state.p) return; NUREUM_state.cb++;
+            const il = NUREUM_state.cb >= NUREUM_state.b; _0x_sp((NUREUM_state.cb / NUREUM_state.b) * 100);
+            if (il) {
+                NUREUM_state.cc++; NUREUM_state.cb = 0; _0x_els.c.innerText = NUREUM_state.cc; _0x_tb(true);
+                _0x_els.c.style.transform = "scale(1.2)"; setTimeout(() => _0x_els.c.style.transform = "scale(1)", 100);
+                if (NUREUM_state.cc >= NUREUM_state.m) _0x_fw();
+            } else _0x_tb(false);
+        }, NUREUM_state.i * 1000);
+    }
+
+    function _0x_rw() { clearInterval(NUREUM_state.tm); _0x_run(); }
+
+    window.FitBbeak_pauseWorkout = function() {
+        NUREUM_state.p = !NUREUM_state.p; _0x_els.pb.innerText = NUREUM_state.p ? FitBbeak_i18n[NUREUM_state.l].resume : FitBbeak_i18n[NUREUM_state.l].pause;
+        if (NUREUM_state.p) _0x_as(); else _0x_ks(); _0x_stb();
+    };
+
+    window.NUREUM_stopWorkout = function() {
+        clearInterval(NUREUM_state.tm); clearInterval(NUREUM_state.cdt); NUREUM_state.r = false; NUREUM_state.p = false; NUREUM_state.sk = 'statusStopped';
+        _0x_as(); _0x_els.sb.classList.remove('hidden'); _0x_els.ab.classList.add('hidden'); _0x_els.c.innerText = "0"; _0x_sp(0); _0x_els.mc.classList.remove('counting-down');
+    };
+
+    function _0x_fw() { NUREUM_stopWorkout(); NUREUM_state.sk = 'statusFinished'; _0x_stb(); }
+
+    _0x_els.lsd.addEventListener('click', (e) => { e.stopPropagation(); _0x_els.lo.classList.toggle('select-hide'); _0x_els.lsd.classList.toggle('select-arrow-active'); });
+    _0x_els.lo.querySelectorAll('div').forEach(o => {
+        o.addEventListener('click', () => {
+            _0x_els.lsd.innerText = o.innerText; _0x_els.lo.classList.add('select-hide'); _0x_els.lsd.classList.remove('select-arrow-active');
+            NUREUM_state.l = o.dataset.value; localStorage.setItem('fb_l', NUREUM_state.l); _0x_ui();
         });
-    }
-
-    generateItems() {
-        this.scroller.innerHTML = '';
-        this.items = [];
-        let values = (this.id === 'interval') ? this.getIntervalValues() : [];
-
-        if (this.id !== 'interval') {
-            for (let v = this.min; v <= this.max; v = parseFloat((v + this.step).toFixed(2))) {
-                values.push(v);
-            }
-        }
-
-        const renderValues = this.isLoop ? 
-            [...values.slice(-this.cloneCount), ...values, ...values.slice(0, this.cloneCount)] : 
-            values;
-
-        renderValues.forEach(v => {
-            const item = document.createElement('div');
-            item.className = 'wheel-item';
-            item.innerText = (this.id === 'interval' && v >= 0.81 && v <= 1.49) ? v.toFixed(2) : v;
-            item.dataset.value = v;
-            this.scroller.appendChild(item);
-            this.items.push(item);
-        });
-    }
-
-    render() {
-        const centerOffset = (this.container.getBoundingClientRect().height / 2) - (this.itemHeight / 2);
-        this.translateY = centerOffset - (this.getScrollIndexByValue(this.value) * this.itemHeight);
-        this.scroller.style.transform = `translateY(${this.translateY}px)`;
-        this.updateItemStyles();
-    }
-
-    getScrollIndexByValue(val) {
-        if (this.id === 'interval') {
-            const values = this.getIntervalValues();
-            const baseIndex = values.indexOf(val);
-            return this.isLoop ? baseIndex + this.cloneCount : baseIndex;
-        }
-        const baseIndex = Math.round((val - this.min) / this.step);
-        return this.isLoop ? baseIndex + this.cloneCount : baseIndex;
-    }
-
-    getIntervalValues() {
-        let values = [];
-        for (let v = 0.1; v <= 0.8; v = parseFloat((v + 0.1).toFixed(2))) values.push(v);
-        for (let v = 0.81; v <= 1.49; v = parseFloat((v + 0.01).toFixed(2))) values.push(v);
-        for (let v = 1.5; v <= 2.5; v = parseFloat((v + 0.1).toFixed(2))) values.push(v);
-        for (let v = 3.0; v <= 5.0; v = parseFloat((v + 0.5).toFixed(2))) values.push(v);
-        return values;
-    }
-
-    updateItemStyles() {
-        const centerOffset = (this.container.getBoundingClientRect().height / 2) - (this.itemHeight / 2);
-        const relativeScroll = -(this.translateY - centerOffset);
-        
-        this.items.forEach((item, index) => {
-            const itemPos = index * this.itemHeight;
-            const diff = Math.abs(relativeScroll - itemPos);
-            
-            item.classList.remove('active', 'nearby', 'far');
-            
-            if (diff < this.itemHeight * 0.4) {
-                item.classList.add('active');
-            } else if (diff < this.itemHeight * 1.2) {
-                item.classList.add('nearby');
-            } else {
-                item.classList.add('far');
-            }
-            
-            // Dramatic 3D effect
-            const rotation = (itemPos - relativeScroll) / 35 * 65;
-            const scale = 1 - (diff / 120);
-            const z = (diff < 12) ? 15 : 0;
-            item.style.transform = `rotateX(${rotation}deg) scale(${scale}) translateZ(${z}px)`;
-            item.style.opacity = Math.max(0.1, 1 - (diff / 60));
-        });
-    }
-
-    setTranslateY(y) {
-        this.translateY = y;
-        
-        if (this.isLoop) {
-            const originalCount = this.items.length - (2 * this.cloneCount);
-            const totalHeight = originalCount * this.itemHeight;
-            const centerOffset = (this.container.getBoundingClientRect().height / 2) - (this.itemHeight / 2);
-            
-            const minBound = centerOffset - (this.items.length - this.cloneCount) * this.itemHeight;
-            const maxBound = centerOffset - (this.cloneCount - 1) * this.itemHeight;
-            
-            if (this.translateY < minBound) this.translateY += totalHeight;
-            if (this.translateY > maxBound) this.translateY -= totalHeight;
-        }
-
-        this.scroller.style.transform = `translateY(${this.translateY}px)`;
-        this.updateItemStyles();
-    }
-
-    scrollToValue(val, animate = true) {
-        this.value = val;
-        this.input.value = val;
-        this.scroller.style.transition = animate ? 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)' : 'none';
-        this.render();
-    }
-
-    addEventListeners() {
-        let isDragging = false;
-        
-        const onStart = (y) => {
-            isDragging = true;
-            this.startY = y;
-            this.startTranslateY = this.translateY;
-            this.scroller.style.transition = 'none';
-            this.viewport.style.cursor = 'grabbing';
-        };
-
-        const onMove = (y) => {
-            if (!isDragging) return;
-            const dy = y - this.startY;
-            this.setTranslateY(this.startTranslateY + dy);
-        };
-
-        const onEnd = () => {
-            if (!isDragging) return;
-            isDragging = false;
-            this.viewport.style.cursor = 'ns-resize';
-            this.snap();
-        };
-
-        // Desktop
-        this.viewport.addEventListener('mousedown', e => onStart(e.pageY));
-        window.addEventListener('mousemove', e => onMove(e.pageY));
-        window.addEventListener('mouseup', onEnd);
-
-        // Touch
-        this.viewport.addEventListener('touchstart', e => onStart(e.touches[0].pageY));
-        this.viewport.addEventListener('touchmove', e => {
-            e.preventDefault();
-            onMove(e.touches[0].pageY);
-        }, { passive: false });
-        this.viewport.addEventListener('touchend', onEnd);
-
-        // Wheel
-        this.container.addEventListener('wheel', e => {
-            e.preventDefault();
-            this.scroller.style.transition = 'none';
-            this.setTranslateY(this.translateY - e.deltaY * 0.5);
-            
-            clearTimeout(this.wheelTimeout);
-            this.wheelTimeout = setTimeout(() => this.snap(), 150);
-        }, { passive: false });
-
-        // Tap to Edit
-        this.viewport.addEventListener('click', (e) => {
-            if (Math.abs(this.translateY - this.startTranslateY) < 5) {
-                this.input.classList.remove('hidden');
-                this.input.focus();
-                this.input.select();
-            }
-        });
-
-        this.input.addEventListener('blur', () => {
-            this.input.classList.add('hidden');
-            this.setValue(this.input.value);
-        });
-
-        this.input.addEventListener('keypress', e => {
-            if (e.key === 'Enter') this.input.blur();
-        });
-    }
-
-    snap() {
-        const centerOffset = (this.container.getBoundingClientRect().height / 2) - (this.itemHeight / 2);
-        const index = Math.round((centerOffset - this.translateY) / this.itemHeight);
-        const clampedIndex = Math.max(0, Math.min(this.items.length - 1, index));
-        const item = this.items[clampedIndex];
-        const val = parseFloat(item.dataset.value);
-        this.setValue(val, true);
-    }
-
-    getNearestValue(rawVal) {
-        let values = (this.id === 'interval') ? this.getIntervalValues() : [];
-        if (this.id !== 'interval') {
-            for (let v = this.min; v <= this.max; v = parseFloat((v + this.step).toFixed(2))) {
-                values.push(v);
-            }
-        }
-        if (values.length === 0) return rawVal;
-        return values.reduce((prev, curr) => Math.abs(curr - rawVal) < Math.abs(prev - rawVal) ? curr : prev);
-    }
-
-    setValue(val, animate = true) {
-        val = parseFloat(val);
-        if (isNaN(val)) val = this.min;
-
-        if (this.isLoop) {
-            if (val > this.max) val = this.min;
-            else if (val < this.min) val = this.max;
-        } else {
-            val = Math.max(this.min, Math.min(this.max, val));
-        }
-        
-        val = this.getNearestValue(val);
-        
-        this.value = val;
-        this.scrollToValue(val, animate);
-        if (this.onUpdate) this.onUpdate(val);
-    }
-}
-
-// Screen Wake Lock API
-let wakeLock = null;
-
-const keepScreenOn = async () => {
-    // 1. Web WakeLock API (Standard Web)
-    try {
-        if ('wakeLock' in navigator) {
-            wakeLock = await navigator.wakeLock.request('screen');
-        }
-    } catch (err) {
-        console.error(`${err.name}, ${err.message}`);
-    }
-
-    // 2. Capacitor Plugin (Native/Hybrid)
-    try {
-        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.KeepAwake) {
-            await window.Capacitor.Plugins.KeepAwake.keepAwake();
-        }
-    } catch (err) {
-        console.error(`Capacitor KeepAwake Error: ${err.message}`);
-    }
-};
-
-const allowScreenOff = async () => {
-    // 1. Web WakeLock API (Standard Web)
-    if (wakeLock !== null) {
-        try {
-            await wakeLock.release();
-            wakeLock = null;
-        } catch (err) {
-            console.error(`${err.name}, ${err.message}`);
-        }
-    }
-
-    // 2. Capacitor Plugin (Native/Hybrid)
-    try {
-        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.KeepAwake) {
-            await window.Capacitor.Plugins.KeepAwake.allowSleep();
-        }
-    } catch (err) {
-        console.error(`Capacitor KeepAwake Error: ${err.message}`);
-    }
-};
-
-// State Management
-let state = {
-    lang: localStorage.getItem('fitbbeak_lang') || 'ko',
-    theme: localStorage.getItem('fitbbeak_theme') || 'dark',
-    isWorkoutRunning: false,
-    isPaused: false,
-    readyTime: Math.min(9, parseInt(localStorage.getItem('fitbbeak_readyTime')) || 5),
-    interval: Math.max(0.1, Math.min(5.0, parseFloat(localStorage.getItem('fitbbeak_interval')) || 1.5)),
-    beepsPerRep: Math.min(19, parseInt(localStorage.getItem('fitbbeak_beepsPerRep')) || 2),
-    maxReps: Math.min(199, parseInt(localStorage.getItem('fitbbeak_maxReps')) || 20),
-    currentCount: 0,
-    currentBeep: 0,
-    startTime: null,
-    timer: null,
-    countdownTimer: null,
-    audioCtx: null,
-    statusKey: 'statusReady'
-};
-
-// DOM Elements
-const elements = {
-    body: document.body,
-    brandHeader: document.getElementById('brand-header'),
-    langSelector: document.getElementById('langSelector'),
-    langSelected: document.getElementById('langSelected'),
-    langOptions: document.getElementById('langOptions'),
-    themeToggle: document.getElementById('theme-toggle'),
-    counter: document.getElementById('counter'),
-    startBtn: document.getElementById('startBtn'),
-    activeBtns: document.getElementById('activeBtns'),
-    pauseBtn: document.getElementById('pauseBtn'),
-    stopBtn: document.getElementById('stopBtn'),
-    mainContainer: document.getElementById('main-container'),
-    flashOverlay: document.getElementById('flash-overlay'),
-    progressRing: document.querySelector('.progress-ring__circle')
-};
-
-// Picker Instances
-let pickers = {};
-function initPickers() {
-    pickers.readyTime = new WheelPicker('readyTime', 1, 9, 1, state.readyTime, (val) => {
-        state.readyTime = val;
-        localStorage.setItem('fitbbeak_readyTime', val);
-    }, true);
-    pickers.interval = new WheelPicker('interval', 0.1, 5.0, 0.1, state.interval, (val) => {
-        state.interval = val;
-        localStorage.setItem('fitbbeak_interval', val);
-        if (state.isWorkoutRunning && !state.isPaused) restartWorkoutTimer();
-    }, true, 10);
-    pickers.beepsPerRep = new WheelPicker('beepsPerRep', 1, 19, 1, state.beepsPerRep, (val) => {
-        state.beepsPerRep = val;
-        localStorage.setItem('fitbbeak_beepsPerRep', val);
-    }, true);
-    pickers.maxReps = new WheelPicker('maxReps', 1, 199, 1, state.maxReps, (val) => {
-        state.maxReps = val;
-        localStorage.setItem('fitbbeak_maxReps', val);
-    }, true);
-}
-
-// Progress Ring Configuration
-const radius = elements.progressRing.r.baseVal.value;
-const circumference = radius * 2 * Math.PI;
-elements.progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
-elements.progressRing.style.strokeDashoffset = circumference;
-
-function setProgress(percent) {
-    const offset = circumference - (percent / 100 * circumference);
-    elements.progressRing.style.strokeDashoffset = offset;
-}
-
-// Audio Engine
-function playSound(freq, duration = 0.1, volume = 0.5, type = 'sine') {
-    if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (state.audioCtx.state === 'suspended') state.audioCtx.resume();
-
-    const now = state.audioCtx.currentTime;
-    const osc = state.audioCtx.createOscillator();
-    const gain = state.audioCtx.createGain();
-
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, now);
-
-    gain.gain.setValueAtTime(volume, now);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + duration);
-
-    osc.connect(gain);
-    gain.connect(state.audioCtx.destination);
-
-    osc.start(now);
-    osc.stop(now + duration);
-
-    // Visual Flash
-    elements.flashOverlay.classList.remove('flash-active');
-    void elements.flashOverlay.offsetWidth;
-    elements.flashOverlay.classList.add('flash-active');
-}
-
-function countdownBeep(isHigh) {
-    const freq = isHigh ? 800 : 440;
-    const volume = isHigh ? 0.5 : 0.3;
-    playSound(freq, 0.1, volume, 'square');
-}
-
-function tempoBeep(isRepComplete) {
-    const freq = isRepComplete ? 1200 : 600;
-    const type = isRepComplete ? 'triangle' : 'sine';
-    // 템포 비프 볼륨 극대화 (최대 가청 범위 확보)
-    let volume = isRepComplete ? 2.0 : 1.5;
-    const duration = isRepComplete ? 0.2 : 0.1;
-    playSound(freq, duration, volume, type);
-}
-
-function stateTransitionBeep() {
-    // 800Hz 주파수의 0.5초 길이 비프음 (길고 묵직한 신호음)
-    playSound(800, 0.5, 0.7, 'sine');
-}
-
-// UI Updates
-function updateUI() {
-    const data = i18n[state.lang];
-    elements.brandHeader.innerText = data.brand;
-    document.getElementById('label-ready').innerText = data.labelReady;
-    document.getElementById('label-interval').innerText = data.labelInterval;
-    document.getElementById('label-beeps').innerText = data.labelBeeps;
-    document.getElementById('label-goal').innerText = data.labelGoal;
-    elements.startBtn.innerText = data.start;
-    elements.stopBtn.innerText = data.stop;
-    elements.pauseBtn.innerText = state.isPaused ? data.resume : data.pause;
-    
-    // Units
-    document.getElementById('unit-ready').innerText = data.unitSec;
-    document.getElementById('unit-interval').innerText = data.unitSec;
-    document.getElementById('unit-beeps').innerText = data.unitCount;
-    document.getElementById('unit-goal').innerText = data.unitReps;
-
-    // Theme
-    elements.body.className = state.theme === 'dark' ? 'dark-mode' : '';
-}
-
-// Actions
-function toggleTheme() {
-    state.theme = state.theme === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('fitbbeak_theme', state.theme);
-    updateUI();
-}
-
-function adjustValue(id, dir) {
-    const picker = pickers[id];
-    let val = picker.value;
-    let step = picker.step;
-    
-    // Smart Step for interval (kept from original)
-    if (id === 'interval') {
-        if (dir === 1) { // Increasing
-            if (val < 0.795) step = 0.1;
-            else if (val >= 0.795 && val < 1.495) step = 0.01;
-            else if (val >= 1.495 && val < 2.495) step = 0.1;
-            else step = 0.5;
-        } else { // Decreasing
-            if (val <= 0.805) step = 0.1;
-            else if (val > 0.805 && val <= 1.505) step = 0.01;
-            else if (val > 1.505 && val <= 2.505) step = 0.1;
-            else step = 0.5;
-        }
-    }
-
-    val = val + (step * dir);
-    val = parseFloat(val.toFixed(id === 'interval' ? 2 : 0));
-    
-    picker.setValue(val);
-}
-
-function startWorkout() {
-    keepScreenOn();
-
-    state.isWorkoutRunning = true;
-    state.isPaused = false;
-    state.currentCount = 0;
-    state.currentBeep = 0;
-    
-    // Resume AudioContext immediately for zero-delay
-    if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (state.audioCtx.state === 'suspended') state.audioCtx.resume();
-
-    elements.startBtn.classList.add('hidden');
-    elements.activeBtns.classList.remove('hidden');
-    
-    let prepCount = state.readyTime;
-    state.statusKey = 'statusPreparing';
-    elements.counter.innerText = prepCount;
-    elements.mainContainer.classList.add('counting-down');
-    
-    // Initial beep
-    countdownBeep(prepCount <= 3);
-
-    state.countdownTimer = setInterval(() => {
-        if (state.isPaused) return;
-        prepCount--;
-        if (prepCount > 0) {
-            elements.counter.innerText = prepCount;
-            // Short beep at 3, 2, 1
-            countdownBeep(prepCount <= 3);
-            setProgress(( (state.readyTime - prepCount) / state.readyTime) * 100);
-            
-            if (prepCount <= 3) {
-                elements.counter.style.transform = "scale(1.2)";
-                setTimeout(() => elements.counter.style.transform = "scale(1)", 100);
-            }
-        } else {
-            clearInterval(state.countdownTimer);
-            elements.mainContainer.classList.remove('counting-down');
-            stateTransitionBeep();
-            runWorkoutLoop();
-        }
-    }, 1000);
-}
-
-function runWorkoutLoop() {
-    state.statusKey = 'statusWorkout';
-    elements.counter.innerText = "0";
-    setProgress(0);
-
-    const ms = state.interval * 1000;
-    state.timer = setInterval(() => {
-        if (state.isPaused) return;
-
-        state.currentBeep++;
-        const isLastBeep = state.currentBeep >= state.beepsPerRep;
-        
-        // Progress within a rep
-        setProgress((state.currentBeep / state.beepsPerRep) * 100);
-
-        if (isLastBeep) {
-            state.currentCount++;
-            state.currentBeep = 0;
-            elements.counter.innerText = state.currentCount;
-            tempoBeep(true); // Rep complete
-            
-            // Visual feedback
-            elements.counter.style.transform = "scale(1.2)";
-            setTimeout(() => elements.counter.style.transform = "scale(1)", 100);
-
-            if (state.currentCount >= state.maxReps) {
-                finishWorkout();
-            }
-        } else {
-            tempoBeep(false); // Normal beep
-        }
-    }, ms);
-}
-
-function restartWorkoutTimer() {
-    clearInterval(state.timer);
-    runWorkoutLoop();
-}
-
-function pauseWorkout() {
-    state.isPaused = !state.isPaused;
-    elements.pauseBtn.innerText = state.isPaused ? i18n[state.lang].resume : i18n[state.lang].pause;
-    
-    // 일시정지 시 화면 잠금 해제, 재개 시 잠금 활성화
-    if (state.isPaused) {
-        allowScreenOff();
-    } else {
-        keepScreenOn();
-    }
-    
-    stateTransitionBeep();
-}
-
-function stopWorkout() {
-    clearInterval(state.timer);
-    clearInterval(state.countdownTimer);
-    state.isWorkoutRunning = false;
-    state.isPaused = false;
-    state.statusKey = 'statusStopped';
-    
-    allowScreenOff();
-    
-    elements.startBtn.classList.remove('hidden');
-    elements.activeBtns.classList.add('hidden');
-    elements.counter.innerText = "0";
-    setProgress(0);
-    elements.mainContainer.classList.remove('counting-down');
-}
-
-function finishWorkout() {
-    stopWorkout();
-    state.statusKey = 'statusFinished';
-    stateTransitionBeep();
-}
-
-// Event Listeners
-
-// Custom Language Selector Logic
-elements.langSelected.addEventListener('click', (e) => {
-    e.stopPropagation();
-    elements.langOptions.classList.toggle('select-hide');
-    elements.langSelected.classList.toggle('select-arrow-active');
-});
-
-elements.langOptions.querySelectorAll('div').forEach(opt => {
-    opt.addEventListener('click', () => {
-        elements.langSelected.innerText = opt.innerText;
-        elements.langOptions.classList.add('select-hide');
-        elements.langSelected.classList.remove('select-arrow-active');
-        state.lang = opt.dataset.value;
-        localStorage.setItem('fitbbeak_lang', state.lang);
-        updateUI();
     });
-});
+    document.addEventListener('click', (e) => { if (!_0x_els.ls.contains(e.target)) { _0x_els.lo.classList.add('select-hide'); _0x_els.lsd.classList.remove('select-arrow-active'); } });
+    _0x_els.tt.addEventListener('click', NUREUM_toggleTheme);
+    document.querySelectorAll('.btn-adjust').forEach(b => { b.addEventListener('click', () => { _0x_av(b.dataset.target, parseInt(b.dataset.dir)); }); });
+    _0x_els.sb.addEventListener('click', FitBbeak_startWorkout);
+    _0x_els.pb.addEventListener('click', FitBbeak_pauseWorkout);
+    _0x_els.stb.addEventListener('click', NUREUM_stopWorkout);
 
-document.addEventListener('click', (e) => {
-    if (!elements.langSelector.contains(e.target)) {
-        elements.langOptions.classList.add('select-hide');
-        elements.langSelected.classList.remove('select-arrow-active');
-    }
-});
+    const ilo = _0x_els.lo.querySelector(`div[data-value="${NUREUM_state.l}"]`);
+    if (ilo) _0x_els.lsd.innerText = ilo.innerText;
+    _0x_ip(); _0x_ui(); _0x_sp(0);
 
-elements.themeToggle.addEventListener('click', toggleTheme);
-
-document.querySelectorAll('.btn-adjust').forEach(btn => {
-    btn.addEventListener('click', () => {
-        adjustValue(btn.dataset.target, parseInt(btn.dataset.dir));
-    });
-});
-
-elements.startBtn.addEventListener('click', startWorkout);
-elements.pauseBtn.addEventListener('click', pauseWorkout);
-elements.stopBtn.addEventListener('click', stopWorkout);
-
-// Init
-const initialLangOpt = elements.langOptions.querySelector(`div[data-value="${state.lang}"]`);
-if (initialLangOpt) {
-    elements.langSelected.innerText = initialLangOpt.innerText;
-}
-initPickers();
-updateUI();
-setProgress(0);
-
-// 환경에 맞춰 메일을 전송하는 완성형 함수
-function sendEmail() {
-  const email = "ButtonNureum@gmail.com";
-  const subject = encodeURIComponent("[핏삑/FitBbeak] 코드 구매 및 협업 문의");
-  const body = encodeURIComponent("안녕하세요, '버튼누름'님.\n\n핏삑(FitBbeak) 앱의 소스 코드 구매 및 비즈니스 협업에 대해 문의드립니다.");
-  const mailUrl = `mailto:${email}?subject=${subject}&body=${body}`;
-
-  // 1. 안드로이드/iOS 설치형 앱(Capacitor) 환경인지 확인
-  const isApp = window.location.protocol === 'capacitor:' || window.location.protocol === 'http:' && window.Capacitor;
-
-  if (isApp) {
-    // 앱 환경: 시스템 앱을 강제로 깨우기 위해 _system 사용
-    window.open(mailUrl, '_system');
-  } else {
-    // PC 및 모바일 웹 브라우저 환경: 새 창 없이 현재 페이지에서 메일 앱 호출
-    window.location.href = mailUrl;
-  }
-}
+    window.FitBbeak_sendEmail = function() {
+        const e = "ButtonNureum@gmail.com", s = encodeURIComponent("[핏삑/FitBbeak] 코드 구매 및 협업 문의"), b = encodeURIComponent("안녕하세요, '버튼누름'님.\n\n핏삑(FitBbeak) 앱의 소스 코드 구매 및 비즈니스 협업에 대해 문의드립니다."), u = `mailto:${e}?subject=${s}&body=${b}`;
+        const isApp = window.location.protocol === 'capacitor:' || (window.location.protocol === 'http:' && window.Capacitor);
+        if (isApp) window.open(u, '_system'); else window.location.href = u;
+    };
+})();
