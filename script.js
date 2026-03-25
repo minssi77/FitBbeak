@@ -287,9 +287,11 @@
     if (ilo) _0x_els.lsd.innerText = ilo.innerText;
     _0x_ip(); _0x_ui(); _0x_sp(0);
 
+    /*
     window.FitBbeak_sendEmail = function() {
         const e = "ButtonNureum@gmail.com", s = encodeURIComponent("[핏삑/FitBbeak] 코드 구매 및 협업 문의"), b = encodeURIComponent("안녕하세요, '버튼누름'님.\n\n핏삑(FitBbeak) 앱의 소스 코드 구매 및 비즈니스 협업에 대해 문의드립니다."), u = `mailto:${e}?subject=${s}&body=${b}`;
         const isApp = window.location.protocol === 'capacitor:' || (window.location.protocol === 'http:' && window.Capacitor);
         if (isApp) window.open(u, '_system'); else window.location.href = u;
     };
+    */
 })();

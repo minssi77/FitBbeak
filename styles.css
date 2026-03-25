@@ -553,10 +553,10 @@ label {
 }
 
 /* 문의 버튼 스타일 */
+/* 문의 버튼 및 툴팁 숨김 처리 (요청에 의한 주석 처리)
 .contact-button {
   position: fixed;
   right: 20px;
-  /* 하단 안전 영역 + 시작 버튼 높이(약 80px 가정) + 유격 30px 적용 */
   bottom: calc(env(safe-area-inset-bottom) + 110px); 
   width: 50px;
   height: 50px;
@@ -569,9 +569,8 @@ label {
   font-size: 24px;
   cursor: pointer;
   z-index: 1000;
-  backdrop-filter: blur(5px); /* 유리 질감 효과 */
+  backdrop-filter: blur(5px);
   transition: transform 0.2s ease;
-  /* 모바일 터치 시 하이라이트 제거 */
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -579,7 +578,6 @@ label {
   transform: scale(0.9);
 }
 
-/* 툴팁(Tooltip) 스타일 - 마우스 호버 및 길게 누르기 대응 */
 .tooltip-text {
   visibility: hidden;
   width: 220px;
@@ -603,3 +601,4 @@ label {
   visibility: visible;
   opacity: 1;
 }
+*/
