@@ -750,3 +750,15 @@ if (initialLangOpt) {
 initPickers();
 updateUI();
 setProgress(0);
+
+// 버튼누름님에게 메일 전송하는 함수
+function sendEmail() {
+  const email = "ButtonNureum@gmail.com";
+  // 제목: [핏삑/FitBbeak] 코드 구매 및 협업 문의
+  const subject = encodeURIComponent("[핏삑/FitBbeak] 코드 구매 및 협업 문의");
+  // 본문: 안녕하세요, '버튼누름'님. ...
+  const body = encodeURIComponent("안녕하세요, '버튼누름'님.\n\n핏삑(FitBbeak) 앱의 소스 코드 구매 및 비즈니스 협업에 대해 문의드립니다.");
+  
+  // 시스템 기본 메일 앱 실행
+  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+}
