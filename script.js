@@ -59,11 +59,10 @@
                 this.sv(this.val, false);
             }, 50);
             window.addEventListener('resize', () => {
-                if (this.its.length > 0) {
-                    const h = parseFloat(window.getComputedStyle(this.its[0]).height);
-                    if (h > 0) this.ih = h;
-                }
-                this.rn();
+                clearTimeout(this.to);
+                this.to = setTimeout(() => {
+                    this.rn();
+                }, 100);
             });
         }
         _g() {
@@ -82,6 +81,10 @@
         rn() {
             const h = this.cnt.getBoundingClientRect().height;
             if (h <= 0) return;
+            if (this.its.length > 0) {
+                const ih = parseFloat(window.getComputedStyle(this.its[0]).height);
+                if (ih > 0) this.ih = ih;
+            }
             const co = (h / 2) - (this.ih / 2);
             this.ty = co - (this._gi(this.val) * this.ih);
             this.scr.style.transform = `translateY(${this.ty}px)`;
