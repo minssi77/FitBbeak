@@ -566,7 +566,9 @@ label {
     border-color: rgba(255, 255, 255, 0.3);
 }
 
-.lang-btn.active {
+.lang-btn.active,
+.lang-btn.active:hover,
+.dark-mode .lang-btn.active {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     border-color: transparent;
     color: #fff;
