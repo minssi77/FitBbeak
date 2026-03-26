@@ -20,9 +20,10 @@ jobs:
           # 캐시 설정을 추가하여 빌드 속도와 안정성을 높입니다.
           cache: 'gradle'
 
-      - name: Install Dependencies
+      - name: Install Dependencies and Build Web
         run: |
           npm install
+          npm run build # 이 줄이 추가되어 www 폴더를 생성합니다.
           npx cap sync android
 
       - name: Build Android Release

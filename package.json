@@ -4,7 +4,8 @@
   "description": "> **\"숫자는 핏삑이 셀게요, 당신은 동작에만 집중하세요.\"**   > **\"FitBbeak counts the reps; you just focus on the movement.\"**",
   "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "mkdir -p www && cp index.html script.js styles.css explanation.html www/ 2>/dev/null || :"
   },
   "repository": {
     "type": "git",
