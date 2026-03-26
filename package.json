@@ -1,7 +1,7 @@
 {
   "name": "fitbbeak",
   "version": "1.0.0",
-  "description": "> **\"숫자는 핏삑이 셀게요, 당신은 동작에만 집중하세요.\"**   > **\"FitBbeak counts the reps; you just focus on the movement.\"**",
+  "description": "FitBbeak counts the reps; you just focus on the movement. (핏삑)",
   "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

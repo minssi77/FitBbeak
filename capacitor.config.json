@@ -1,6 +1,6 @@
 {
   "appId": "com.fitbbeak.app",
-  "appName": "핏삑",
+  "appName": "FitBbeak",
   "webDir": "www",
   "bundledWebRuntime": false,
   "plugins": {

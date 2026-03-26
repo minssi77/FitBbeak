@@ -10,7 +10,10 @@
             statusReady: 'Ready?', statusPreparing: 'Prepare!', statusWorkout: 'GO!', statusFinished: 'Done!', statusStopped: 'Stopped',
             unitSec: 'sec', unitCount: 'count', unitReps: 'reps', speechStart: 'Start', speechRest: 'Rest', speechFinished: 'Great job',
             emailSubject: '[FitBbeak] Code Purchase & Collaboration Inquiry',
-            emailBody: 'Hello, I am interested in purchasing the FitBbeak source code or discussing collaboration.'
+            emailBody: 'Hello, I am interested in purchasing the FitBbeak source code or discussing collaboration.',
+            guideTitle: 'Why Workout Tempo Matters?',
+            guideContent: '<p>Maintaining a consistent tempo during exercises like squats and push-ups is crucial for maximizing muscle growth and minimizing the risk of injury. <strong>FitBbeak</strong> helps you focus purely on your movement by providing precise auditory signals.</p><p>The science of "Time Under Tension" (TUT) shows that controlled repetitions lead to better neuromuscular adaptation. By setting your ideal interval with <strong>FitBbeak</strong>, you can ensure every rep counts.</p>',
+            privacy: 'Privacy Policy', terms: 'Terms of Service', support: 'Support (Toss Me)'
         },
         ko: {
             brand: '핏삑', labelReady: '준비 시간', labelInterval: '신호 간격', labelBeeps: '카운트당 삑', labelGoal: '목표 횟수',
@@ -18,7 +21,10 @@
             statusReady: '준비됐나요?', statusPreparing: '준비하세요!', statusWorkout: '시작!', statusFinished: '달성!', statusStopped: '중단됨',
             unitSec: '초', unitCount: '회', unitReps: '개', speechStart: '시작', speechRest: '휴식', speechFinished: '수고하셨습니다',
             emailSubject: '[핏삑/FitBbeak] 코드 구매 및 협업 문의',
-            emailBody: '안녕하세요, 핏삑 앱의 소스 코드 구매 및 비즈니스 협업에 대해 문의드립니다.'
+            emailBody: '안녕하세요, 핏삑 앱의 소스 코드 구매 및 비즈니스 협업에 대해 문의드립니다.',
+            guideTitle: '운동 템포가 왜 중요한가요?',
+            guideContent: '<p>스쿼트나 푸쉬업 같은 운동을 할 때 일정한 템포를 유지하는 것은 근성장을 극대화하고 부상 위험을 최소화하는 데 매우 중요합니다. <strong>핏삑(FitBbeak)</strong>은 정밀한 청각 신호를 제공하여 오직 움직임에만 집중할 수 있도록 도와줍니다.</p><p>"지속형 긴장 시간"(TUT) 이론에 따르면, 통제된 반복 횟수는 더 나은 신경근 적응으로 이어집니다. <strong>핏삑</strong>으로 이상적인 간격을 설정하여 모든 반복이 효과를 발휘하도록 하세요.</p>',
+            privacy: '개인정보 처리방침', terms: '이용약관', support: '후원하기 (Toss)'
         },
         de: {
             brand: 'FitBbeak', labelReady: 'Vorbereitung', labelInterval: 'Intervall', labelBeeps: 'Pieptöne/Wdh.', labelGoal: 'Ziel Wdh.',
@@ -26,7 +32,10 @@
             statusReady: 'Bereit?', statusPreparing: 'Fertig machen!', statusWorkout: 'LOS!', statusFinished: 'Fertig!', statusStopped: 'Gestoppt',
             unitSec: 'Sek', unitCount: 'Zähl', unitReps: 'Wdh', speechStart: 'Start', speechRest: 'Pause', speechFinished: 'Gut gemacht',
             emailSubject: '[FitBbeak] Anfrage zu Code-Kauf & Zusammenarbeit',
-            emailBody: 'Hallo, ich interessiere mich für den Kauf des FitBbeak-Quellcodes oder eine Zusammenarbeit.'
+            emailBody: 'Hallo, ich interessiere mich für den Kauf des FitBbeak-Quellcodes oder eine Zusammenarbeit.',
+            guideTitle: 'Warum das Workout-Tempo wichtig ist',
+            guideContent: '<p>Ein gleichmäßiges Tempo bei Übungen wie Kniebeugen oder Liegestützen ist entscheidend, um das Muskelwachstum zu maximieren und das Verletzungsrisiko zu minimieren. <strong>FitBbeak</strong> hilft Ihnen, sich rein auf Ihre Bewegung zu konzentrieren, indem es präzise akustische Signale liefert.</p><p>Die Wissenschaft der "Zeit unter Spannung" (TUT) zeigt, dass kontrollierte Wiederholungen zu einer besseren neuromuskulären Anpassung führen. Mit <strong>FitBbeak</strong> können Sie Ihr ideales Intervall einstellen und sicherstellen, dass jede Wiederholung zählt.</p>',
+            privacy: 'Datenschutz', terms: 'AGB', support: 'Support (Toss Me)'
         },
         es: {
             brand: 'FitBbeak', labelReady: 'Preparación', labelInterval: 'Intervalo', labelBeeps: 'Pitidos/Rep', labelGoal: 'Meta Reps',
@@ -34,7 +43,10 @@
             statusReady: '¿Listo?', statusPreparing: '¡Prepárate!', statusWorkout: '¡VAMOS!', statusFinished: '¡Meta!', statusStopped: 'Detenido',
             unitSec: 'seg', unitCount: 'cont', unitReps: 'reps', speechStart: 'Inicio', speechRest: 'Descanso', speechFinished: 'Buen trabajo',
             emailSubject: '[FitBbeak] Consulta sobre compra de código y colaboración',
-            emailBody: 'Hola, estoy interesado en comprar el código fuente de FitBbeak o en colaborar.'
+            emailBody: 'Hola, estoy interesado en comprar el código fuente de FitBbeak o en colaborar.',
+            guideTitle: '¿Por qué importa el ritmo del entrenamiento?',
+            guideContent: '<p>Mantener un ritmo constante durante ejercicios como sentadillas y flexiones es crucial para maximizar el crecimiento muscular y minimizar el riesgo de lesiones. <strong>FitBbeak</strong> le ayuda a concentrarse puramente en su movimiento mediante señales auditivas precisas.</p><p>La ciencia del "Tiempo Bajo Tensión" (TUT) muestra que las repeticiones controladas conducen a una mejor adaptación neuromuscular. Al configurar su intervalo ideal con <strong>FitBbeak</strong>, puede asegurarse de que cada repetición cuente.</p>',
+            privacy: 'Privacidad', terms: 'Términos', support: 'Soporte (Toss Me)'
         }
     };
 
@@ -47,6 +59,7 @@
             this.vpt = this.cnt.querySelector('.wheel-viewport');
             this.min = b; this.max = c; this.stp = d; this.val = e; this.upd = f; this.lp = g; this.cc = 5;
             this.ih = 30; this.its = []; this.sy = 0; this.ty = 0; this.sty = 0; this.to = null;
+            this.vals = (this.id === 'interval') ? this._gv() : null;
             this._i();
         }
         _i() {
@@ -66,9 +79,9 @@
         }
         _g() {
             this.scr.innerHTML = ''; this.its = [];
-            let v_s = (this.id === 'interval') ? this._gv() : [];
-            if (this.id !== 'interval') for (let v = this.min; v <= this.max; v = parseFloat((v + this.stp).toFixed(2))) v_s.push(v);
-            const r_v = this.lp ? [...v_s.slice(-this.cc), ...v_s, ...v_s.slice(0, this.cc)] : v_s;
+            let vs = this.vals;
+            if (!vs) { vs = []; for (let v = this.min; v <= this.max; v = parseFloat((v + this.stp).toFixed(2))) vs.push(v); }
+            const r_v = this.lp ? [...vs.slice(-this.cc), ...vs, ...vs.slice(0, this.cc)] : vs;
             r_v.forEach(v => {
                 const i = document.createElement('div');
                 i.className = 'wheel-item';
@@ -90,12 +103,8 @@
             this._us();
         }
         _gi(v) {
-            if (this.id === 'interval') {
-                const v_s = this._gv();
-                const bi = v_s.indexOf(v);
-                return this.lp ? bi + this.cc : bi;
-            }
-            const bi = Math.round((v - this.min) / this.stp);
+            const vs = this.vals || (() => { let t = []; for (let i = this.min; i <= this.max; i = parseFloat((i + this.stp).toFixed(2))) t.push(i); return t; })();
+            const bi = vs.indexOf(v);
             return this.lp ? bi + this.cc : bi;
         }
         _gv() {
@@ -168,10 +177,9 @@
             this.set(parseFloat(this.its[idx].dataset.value), true);
         }
         _gn(r) {
-            let v = (this.id === 'interval') ? this._gv() : [];
-            if (this.id !== 'interval') for (let i = this.min; i <= this.max; i = parseFloat((i + this.stp).toFixed(2))) v.push(i);
-            if (v.length === 0) return r;
-            return v.reduce((p, c) => Math.abs(c - r) < Math.abs(p - r) ? c : p);
+            const vs = this.vals || (() => { let t = []; for (let i = this.min; i <= this.max; i = parseFloat((i + this.stp).toFixed(2))) t.push(i); return t; })();
+            if (vs.length === 0) return r;
+            return vs.reduce((p, c) => Math.abs(c - r) < Math.abs(p - r) ? c : p);
         }
         set(v, a = true) {
             v = parseFloat(v); if (isNaN(v)) v = this.min;
@@ -246,6 +254,13 @@
         document.getElementById('unit-ready').innerText = d.unitSec; document.getElementById('unit-interval').innerText = d.unitSec;
         document.getElementById('unit-beeps').innerText = d.unitCount; document.getElementById('unit-goal').innerText = d.unitReps;
         _0x_els.b.className = NUREUM_state.t === 'dark' ? 'dark-mode' : '';
+        
+        // Sync Iframe
+        const ifr = document.querySelector('iframe');
+        if (ifr && ifr.contentWindow) {
+            ifr.contentWindow.postMessage({ type: 'I18N_UPDATE', content: d }, '*');
+            ifr.contentWindow.postMessage({ type: 'THEME_UPDATE', isDark: NUREUM_state.t === 'dark' }, '*');
+        }
     }
 
     window.NUREUM_toggleTheme = function() {
@@ -345,6 +360,11 @@
     if (_0x_stThemeBtn) {
         _0x_stThemeBtn.addEventListener('click', (e) => { e.stopPropagation(); NUREUM_toggleTheme(); });
     }
+
+    // Iframe communication
+    window.addEventListener('message', (e) => {
+        if (e.data.type === 'READY') _0x_ui();
+    });
 
     _0x_ip(); _0x_ui(); _0x_sp(0);
     _0x_smUpdateLangBtns();
