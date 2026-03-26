@@ -19,7 +19,14 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build Web Assets
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          # 캐시 설정을 추가하여 빌드 속도를 높입니다.
+          cache: 'npm'
+
+      - name: Install Dependencies and Build Web
         run: |
           npm install
           npm run build
