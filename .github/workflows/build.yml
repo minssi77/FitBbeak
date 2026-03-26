@@ -19,17 +19,16 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Install Dependencies
-        run: npm install
-
       - name: Build Web Assets
         run: |
+          npm install
           npm run build
-          # 빌드 후 www 폴더가 생성되었는지 터미널에서 확인하는 로직 추가
-          ls -R ./www/index.html || echo "Error: index.html not found in www"
+          npx cap sync android
 
-      - name: Capacitor Sync
-        run: npx cap sync android
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'build-tools;34.0.0'
 
       - name: Build Android Release
         run: |
