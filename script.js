@@ -160,7 +160,7 @@
     };
 
     let NUREUM_state = {
-        l: localStorage.getItem('fb_l') || 'ko', t: localStorage.getItem('fb_t') || 'dark',
+        l: localStorage.getItem('fb_l') || 'en', t: localStorage.getItem('fb_t') || 'dark',
         r: false, p: false, rt: Math.min(9, parseInt(localStorage.getItem('fb_rt')) || 5),
         i: Math.max(0.1, Math.min(5.0, parseFloat(localStorage.getItem('fb_i')) || 1.5)),
         b: Math.min(19, parseInt(localStorage.getItem('fb_b')) || 2), m: Math.min(199, parseInt(localStorage.getItem('fb_m')) || 20),
@@ -274,18 +274,60 @@
         o.addEventListener('click', () => {
             _0x_els.lsd.innerText = o.innerText; _0x_els.lo.classList.add('select-hide'); _0x_els.lsd.classList.remove('select-arrow-active');
             NUREUM_state.l = o.dataset.value; localStorage.setItem('fb_l', NUREUM_state.l); _0x_ui();
+            _0x_smUpdateLangBtns();
         });
     });
-    document.addEventListener('click', (e) => { if (!_0x_els.ls.contains(e.target)) { _0x_els.lo.classList.add('select-hide'); _0x_els.lsd.classList.remove('select-arrow-active'); } });
+    document.addEventListener('click', (e) => {
+        if (!_0x_els.ls.contains(e.target)) { _0x_els.lo.classList.add('select-hide'); _0x_els.lsd.classList.remove('select-arrow-active'); }
+        const sm = document.getElementById('settings-menu');
+        const stBtn = document.getElementById('settings-toggle');
+        if (sm && !sm.contains(e.target) && stBtn && !stBtn.contains(e.target)) { sm.classList.add('hidden'); }
+    });
     _0x_els.tt.addEventListener('click', NUREUM_toggleTheme);
     document.querySelectorAll('.btn-adjust').forEach(b => { b.addEventListener('click', () => { _0x_av(b.dataset.target, parseInt(b.dataset.dir)); }); });
     _0x_els.sb.addEventListener('click', FitBbeak_startWorkout);
     _0x_els.pb.addEventListener('click', FitBbeak_pauseWorkout);
     _0x_els.stb.addEventListener('click', NUREUM_stopWorkout);
 
+    // Settings menu toggle
+    const _0x_settingsToggle = document.getElementById('settings-toggle');
+    const _0x_settingsMenu = document.getElementById('settings-menu');
+    if (_0x_settingsToggle && _0x_settingsMenu) {
+        _0x_settingsToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            _0x_settingsMenu.classList.toggle('hidden');
+        });
+    }
+
+    // Settings menu: lang buttons
+    function _0x_smUpdateLangBtns() {
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.lang === NUREUM_state.l);
+        });
+    }
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            NUREUM_state.l = btn.dataset.lang;
+            localStorage.setItem('fb_l', NUREUM_state.l);
+            _0x_ui();
+            _0x_smUpdateLangBtns();
+            // also sync header dropdown display
+            const ilo2 = _0x_els.lo.querySelector(`div[data-value="${NUREUM_state.l}"]`);
+            if (ilo2) _0x_els.lsd.innerText = ilo2.innerText;
+        });
+    });
+
+    // Settings menu: theme button
+    const _0x_stThemeBtn = document.getElementById('settings-theme-btn');
+    if (_0x_stThemeBtn) {
+        _0x_stThemeBtn.addEventListener('click', (e) => { e.stopPropagation(); NUREUM_toggleTheme(); });
+    }
+
     const ilo = _0x_els.lo.querySelector(`div[data-value="${NUREUM_state.l}"]`);
     if (ilo) _0x_els.lsd.innerText = ilo.innerText;
     _0x_ip(); _0x_ui(); _0x_sp(0);
+    _0x_smUpdateLangBtns();
 
     window.FitBbeak_sendEmail = function() {
         const e = "ButtonNureum@gmail.com", s = encodeURIComponent("[핏삑/FitBbeak] 코드 구매 및 협업 문의"), b = encodeURIComponent("안녕하세요, '버튼누름'님.\n\n핏삑(FitBbeak) 앱의 소스 코드 구매 및 비즈니스 협업에 대해 문의드립니다."), u = `mailto:${e}?subject=${s}&body=${b}`;

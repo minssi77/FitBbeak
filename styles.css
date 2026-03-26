@@ -552,54 +552,138 @@ label {
     color: var(--warning);
 }
 
-/* 문의 버튼 스타일 */
-.contact-button {
-  position: fixed;
-  right: 20px;
-  /* 하단 안전 영역 + 시작 버튼 높이(약 80px 가정) + 유격 30px 적용 */
-  bottom: calc(env(safe-area-inset-bottom) + 110px); 
-  width: 50px;
-  height: 50px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  cursor: pointer;
-  z-index: 1000;
-  backdrop-filter: blur(5px); /* 유리 질감 효과 */
-  transition: transform 0.2s ease;
-  /* 모바일 터치 시 하이라이트 제거 */
-  -webkit-tap-highlight-color: transparent;
+/* ===== Settings Menu ===== */
+.settings-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 500;
+    width: 220px;
 }
 
-.contact-button:active {
-  transform: scale(0.9);
+/* Anchor menu relative to header-controls */
+.header-controls {
+    position: relative;
 }
 
-/* 툴팁(Tooltip) 스타일 - 마우스 호버 및 길게 누르기 대응 */
-.tooltip-text {
-  visibility: hidden;
-  width: 220px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  right: 0;
-  opacity: 0;
-  transition: opacity 0.3s;
-  font-size: 12px;
-  pointer-events: none;
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+.settings-menu-inner {
+    background: rgba(30, 30, 40, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 16px 14px 14px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
-.contact-button:hover .tooltip-text {
-  visibility: visible;
-  opacity: 1;
+.settings-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
+
+.settings-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+/* Language button grid inside settings menu */
+.settings-lang-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+
+.lang-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 6px 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.lang-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+
+.lang-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-color: transparent;
+    color: #fff;
+}
+
+/* Theme toggle button inside settings */
+.settings-theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.85);
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 8px 10px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+}
+
+.settings-theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Divider */
+.settings-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 -2px;
+}
+
+/* Email section */
+.settings-email {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 6px 4px 2px;
+    border-radius: 10px;
+    transition: background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.settings-email:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.settings-email-sub {
+    font-size: 0.62rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-align: center;
+    line-height: 1.4;
+}
+
+.settings-email-addr {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    letter-spacing: 0.2px;
+}
+

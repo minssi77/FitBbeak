@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>FitBbeak - Smart Interval Workout Counter</title>
+    <title>핏삑 FitBbeak - Precision Tempo Workout Timer</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,15 +27,55 @@
             <h1 id="brand-header">FitBbeak</h1>
             <div class="header-controls">
                 <div class="lang-selector custom-select" id="langSelector">
-                    <div class="select-selected" id="langSelected">KO</div>
+                    <div class="select-selected" id="langSelected">EN</div>
                     <div class="select-items select-hide" id="langOptions">
                         <div data-value="ko">KO</div>
                         <div data-value="de">DE</div>
-                        <div data-value="en">EN</div>
                         <div data-value="es">ES</div>
+                        <div data-value="en">EN</div>
+                    </div>
+                </div>
+                <!-- Settings gear button -->
+                <button id="settings-toggle" class="btn-icon" title="Settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+                <!-- Settings Menu Overlay (inside header-controls for correct absolute positioning) -->
+                <div id="settings-menu" class="settings-menu hidden">
+                    <div class="settings-menu-inner">
+                        <!-- Language Section -->
+                        <div class="settings-section">
+                            <div class="settings-label">Language</div>
+                            <div class="settings-lang-grid">
+                                <button class="lang-btn" data-lang="ko">KO</button>
+                                <button class="lang-btn" data-lang="de">DE</button>
+                                <button class="lang-btn" data-lang="es">ES</button>
+                                <button class="lang-btn" data-lang="en">EN</button>
+                            </div>
+                        </div>
+                        <!-- Theme Section -->
+                        <div class="settings-section">
+                            <div class="settings-label">Theme</div>
+                            <button id="settings-theme-btn" class="settings-theme-toggle">
+                                <span class="theme-icon-sun">☀️</span>
+                                <span class="theme-text">Light / Dark</span>
+                                <span class="theme-icon-moon">🌙</span>
+                            </button>
+                        </div>
+                        <!-- Divider -->
+                        <div class="settings-divider"></div>
+                        <!-- Email Section -->
+                        <div class="settings-email" onclick="FitBbeak_sendEmail()">
+                            <div class="settings-email-sub">코드 구매 및 협업 문의</div>
+                            <div class="settings-email-sub">Contact for Code &amp; Collaboration</div>
+                            <div class="settings-email-addr">ButtonNureum@gmail.com</div>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </header>
         
         <section class="settings-grid">
@@ -118,13 +158,5 @@
 
     <script src="script.js"></script>
 
-    <div id="contact-btn" class="contact-button" onclick="FitBbeak_sendEmail()">
-      ✉️
-      <span class="tooltip-text">
-        코드 구매 및 협업 문의<br>
-        (Contact for Code & Collaboration)<br>
-        ButtonNureum@gmail.com
-      </span>
-    </div>
 </body>
 </html>
