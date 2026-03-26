@@ -33,7 +33,7 @@
             window.addEventListener('resize', () => {
                 if (this.its.length > 0) {
                     const h = parseFloat(window.getComputedStyle(this.its[0]).height);
-                    this.ih = h > 0 ? h : 30;
+                    if (h > 0) this.ih = h;
                 }
                 this.rn();
             });
@@ -52,7 +52,9 @@
             });
         }
         rn() {
-            const co = (this.cnt.getBoundingClientRect().height / 2) - (this.ih / 2);
+            const h = this.cnt.getBoundingClientRect().height;
+            if (h <= 0) return;
+            const co = (h / 2) - (this.ih / 2);
             this.ty = co - (this._gi(this.val) * this.ih);
             this.scr.style.transform = `translateY(${this.ty}px)`;
             this._us();
@@ -284,7 +286,10 @@
     if (_0x_settingsToggle && _0x_settingsMenu) {
         _0x_settingsToggle.addEventListener('click', (e) => {
             e.stopPropagation();
-            _0x_settingsMenu.classList.toggle('hidden');
+            const hide = _0x_settingsMenu.classList.toggle('hidden');
+            if (!hide) {
+                Object.values(_0x_pks).forEach(p => p.rn());
+            }
         });
     }
 
