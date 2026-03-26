@@ -40,16 +40,16 @@ jobs:
         distribution: 'zulu'
         java-version: '21'
 
-    - name: 4. APK (Debug) 빌드
+    - name: 4. APK (Release) 빌드
       run: |
         cd android
         chmod +x gradlew
-        ./gradlew assembleDebug
+        ./gradlew assembleRelease
 
-    - name: 5. AAB (Debug Bundle) 빌드
+    - name: 5. AAB (Release Bundle) 빌드
       run: |
         cd android
-        ./gradlew bundleDebug
+        ./gradlew bundleRelease
 
     - name: 6. GitHub Release 생성 및 파일 업로드
       uses: softprops/action-gh-release@v2
@@ -65,9 +65,21 @@ jobs:
 
           > APK 설치 시 기기 설정에서 '출처를 알 수 없는 앱 설치'를 허용해야 합니다.
         files: |
-          android/app/build/outputs/apk/debug/app-debug.apk
-          android/app/build/outputs/bundle/debug/app-debug.aab
+          android/app/build/outputs/apk/release/*.apk
+          android/app/build/outputs/bundle/release/*.aab
         draft: false
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 7. APK 업로드 (Artifact)
+      uses: actions/upload-artifact@v4
+      with:
+        name: FitBbeak-APK
+        path: android/app/build/outputs/apk/release/*.apk
+
+    - name: 8. AAB 업로드 (Artifact)
+      uses: actions/upload-artifact@v4
+      with:
+        name: FitBbeak-AAB
+        path: android/app/build/outputs/bundle/release/*.aab
