@@ -4,10 +4,10 @@
     console.log('Protected by NUREUM Labs');
 
     const FitBbeak_i18n = {
-        en: { brand: 'FitBbeak', labelReady: 'Ready Time', labelInterval: 'Interval', labelBeeps: 'Beeps/Rep', labelGoal: 'Goal Reps', start: 'START WORKOUT', pause: 'PAUSE', resume: 'RESUME', stop: 'STOP', statusReady: 'Ready?', statusPreparing: 'Prepare!', statusWorkout: 'GO!', statusFinished: 'Done!', statusStopped: 'Stopped', guideTitle: 'Why Workout Tempo Matters?', guideContent: '<p>...</p>', privacy: 'Privacy Policy', terms: 'Terms of Service', support: 'Support (Toss Me)', unitSec: 'sec', unitCount: 'count', unitReps: 'reps', speechStart: 'Start', speechRest: 'Rest', speechFinished: 'Great job' },
-        ko: { brand: '핏삑', labelReady: '준비 시간', labelInterval: '신호 간격', labelBeeps: '카운트당 삑', labelGoal: '목표 횟수', start: '운동 시작', pause: '일시정지', resume: '재개', stop: '종료', statusReady: '준비됐나요?', statusPreparing: '준비하세요!', statusWorkout: '시작!', statusFinished: '달성!', statusStopped: '중단됨', guideTitle: '운동 템포가 왜 중요한가요?', guideContent: '<p>...</p>', privacy: '개인정보 처리방침', terms: '이용약관', support: '후원하기 (Toss Me)', unitSec: '초', unitCount: '회', unitReps: '개', speechStart: '시작', speechRest: '휴식', speechFinished: '수고하셨습니다' },
+        en: { brand: 'FitBbeak', labelReady: 'Ready Time', labelInterval: 'Interval', labelBeeps: 'Beeps/Rep', labelGoal: 'Goal Reps', start: 'START WORKOUT', pause: 'PAUSE', resume: 'RESUME', stop: 'STOP', statusReady: 'Ready?', statusPreparing: 'Prepare!', statusWorkout: 'GO!', statusFinished: 'Done!', statusStopped: 'Stopped', unitSec: 'sec', unitCount: 'count', unitReps: 'reps', speechStart: 'Start', speechRest: 'Rest', speechFinished: 'Great job' },
+        ko: { brand: '핏삑', labelReady: '준비 시간', labelInterval: '신호 간격', labelBeeps: '카운트당 삑', labelGoal: '목표 횟수', start: '운동 시작', pause: '일시정지', resume: '재개', stop: '종료', statusReady: '준비됐나요?', statusPreparing: '준비하세요!', statusWorkout: '시작!', statusFinished: '달성!', statusStopped: '중단됨', unitSec: '초', unitCount: '회', unitReps: '개', speechStart: '시작', speechRest: '휴식', speechFinished: '수고하셨습니다' },
         de: { brand: 'FitBbeak', labelReady: 'Vorbereitung', labelInterval: 'Intervall', labelBeeps: 'Pieptöne/Wdh.', labelGoal: 'Ziel Wdh.', start: 'STARTEN', pause: 'PAUSE', resume: 'WEITER', stop: 'STOPP', statusReady: 'Bereit?', statusPreparing: 'Fertig machen!', statusWorkout: 'LOS!', statusFinished: 'Fertig!', statusStopped: 'Gestoppt', guideTitle: 'Warum das Workout-Tempo wichtig ist', guideContent: '<p>...</p>', privacy: 'Datenschutz', terms: 'AGB', support: 'Support (Toss Me)', unitSec: 'Sek', unitCount: 'Zähl', unitReps: 'Wdh', speechStart: 'Start', speechRest: 'Pause', speechFinished: 'Gut gemacht' },
-        es: { brand: 'FitBbeak', labelReady: 'Preparación', labelInterval: 'Intervalo', labelBeeps: 'Pitidos/Rep', labelGoal: 'Meta Reps', start: 'EMPEZAR', pause: 'PAUSA', resume: 'REANUDAR', stop: 'PARAR', statusReady: '¿Listo?', statusPreparing: '¡Prepárate!', statusWorkout: '¡VAMOS!', statusFinished: '¡Meta!', statusStopped: 'Detenido', guideTitle: '¿Por qué importa el ritmo?', guideContent: '<p>...</p>', privacy: 'Privacidad', terms: 'Términos', support: 'Apoyar (Toss Me)', unitSec: 'seg', unitCount: 'cont', unitReps: 'reps', speechStart: 'Inicio', speechRest: 'Descanso', speechFinished: 'Buen trabajo' }
+        es: { brand: 'FitBbeak', labelReady: 'Preparación', labelInterval: 'Intervalo', labelBeeps: 'Pitidos/Rep', labelGoal: 'Meta Reps', start: 'EMPEZAR', pause: 'PAUSA', resume: 'REANUDAR', stop: 'PARAR', statusReady: '¿Listo?', statusPreparing: '¡Prepárate!', statusWorkout: '¡VAMOS!', statusFinished: '¡Meta!', statusStopped: 'Detenido', unitSec: 'seg', unitCount: 'cont', unitReps: 'reps', speechStart: 'Inicio', speechRest: 'Descanso', speechFinished: 'Buen trabajo' }
     };
 
     class FitBbeak_Picker {
@@ -164,7 +164,7 @@
         r: false, p: false, rt: Math.min(9, parseInt(localStorage.getItem('fb_rt')) || 5),
         i: Math.max(0.1, Math.min(5.0, parseFloat(localStorage.getItem('fb_i')) || 1.5)),
         b: Math.min(19, parseInt(localStorage.getItem('fb_b')) || 2), m: Math.min(199, parseInt(localStorage.getItem('fb_m')) || 20),
-        cc: 0, cb: 0, st: null, tm: null, cdt: null, ac: null, sk: 'statusReady'
+        cc: 0, cb: 0, tm: null, cdt: null, ac: null, sk: 'statusReady'
     };
 
     const _0x_els = {

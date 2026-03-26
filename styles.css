@@ -17,7 +17,6 @@
     --text-muted: #7f8c8d;
     --border-color: rgba(0, 0, 0, 0.05);
     --glass-blur: 12px;
-    --dropdown-bg: #ffffff;
     --settings-bg: rgba(255, 255, 255, 0.9);
     --settings-border: rgba(0, 0, 0, 0.1);
     --settings-text: #2c3e50;
@@ -33,7 +32,6 @@ body.dark-mode {
     --text-main: #f1f5f9;
     --text-muted: #94a3b8;
     --border-color: rgba(255, 255, 255, 0.1);
-    --dropdown-bg: #1e293b;
     --settings-bg: rgba(30, 30, 40, 0.95);
     --settings-border: rgba(255, 255, 255, 0.12);
     --settings-text: #f1f5f9;
@@ -242,7 +240,7 @@ label {
     left: 10%;
     right: 10%;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-color, var(--primary)), transparent);
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
     opacity: 0.3;
     z-index: 2;
     pointer-events: none;
