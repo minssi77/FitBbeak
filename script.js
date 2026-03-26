@@ -168,8 +168,7 @@
     };
 
     const _0x_els = {
-        b: document.body, bh: document.getElementById('brand-header'), ls: document.getElementById('langSelector'),
-        lsd: document.getElementById('langSelected'), lo: document.getElementById('langOptions'), tt: document.getElementById('theme-toggle'),
+        b: document.body, bh: document.getElementById('brand-header'),
         c: document.getElementById('counter'), sb: document.getElementById('startBtn'), ab: document.getElementById('activeBtns'),
         pb: document.getElementById('pauseBtn'), stb: document.getElementById('stopBtn'), mc: document.getElementById('main-container'),
         fo: document.getElementById('flash-overlay'), pr: document.querySelector('.progress-ring__circle')
@@ -269,21 +268,11 @@
 
     function _0x_fw() { NUREUM_stopWorkout(); NUREUM_state.sk = 'statusFinished'; _0x_stb(); }
 
-    _0x_els.lsd.addEventListener('click', (e) => { e.stopPropagation(); _0x_els.lo.classList.toggle('select-hide'); _0x_els.lsd.classList.toggle('select-arrow-active'); });
-    _0x_els.lo.querySelectorAll('div').forEach(o => {
-        o.addEventListener('click', () => {
-            _0x_els.lsd.innerText = o.innerText; _0x_els.lo.classList.add('select-hide'); _0x_els.lsd.classList.remove('select-arrow-active');
-            NUREUM_state.l = o.dataset.value; localStorage.setItem('fb_l', NUREUM_state.l); _0x_ui();
-            _0x_smUpdateLangBtns();
-        });
-    });
     document.addEventListener('click', (e) => {
-        if (!_0x_els.ls.contains(e.target)) { _0x_els.lo.classList.add('select-hide'); _0x_els.lsd.classList.remove('select-arrow-active'); }
         const sm = document.getElementById('settings-menu');
         const stBtn = document.getElementById('settings-toggle');
         if (sm && !sm.contains(e.target) && stBtn && !stBtn.contains(e.target)) { sm.classList.add('hidden'); }
     });
-    _0x_els.tt.addEventListener('click', NUREUM_toggleTheme);
     document.querySelectorAll('.btn-adjust').forEach(b => { b.addEventListener('click', () => { _0x_av(b.dataset.target, parseInt(b.dataset.dir)); }); });
     _0x_els.sb.addEventListener('click', FitBbeak_startWorkout);
     _0x_els.pb.addEventListener('click', FitBbeak_pauseWorkout);
@@ -312,9 +301,6 @@
             localStorage.setItem('fb_l', NUREUM_state.l);
             _0x_ui();
             _0x_smUpdateLangBtns();
-            // also sync header dropdown display
-            const ilo2 = _0x_els.lo.querySelector(`div[data-value="${NUREUM_state.l}"]`);
-            if (ilo2) _0x_els.lsd.innerText = ilo2.innerText;
         });
     });
 
@@ -324,8 +310,6 @@
         _0x_stThemeBtn.addEventListener('click', (e) => { e.stopPropagation(); NUREUM_toggleTheme(); });
     }
 
-    const ilo = _0x_els.lo.querySelector(`div[data-value="${NUREUM_state.l}"]`);
-    if (ilo) _0x_els.lsd.innerText = ilo.innerText;
     _0x_ip(); _0x_ui(); _0x_sp(0);
     _0x_smUpdateLangBtns();
 
