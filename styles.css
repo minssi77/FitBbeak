@@ -491,7 +491,8 @@ label {
     top: calc(100% + 8px);
     right: 0;
     z-index: 500;
-    width: 220px;
+    width: clamp(180px, 56vw, 220px);
+    max-width: calc(100vw - 32px);
 }
 
 /* Anchor menu relative to header-controls */
@@ -503,13 +504,13 @@ label {
     background: var(--settings-bg);
     border: 1px solid var(--settings-border);
     border-radius: 16px;
-    padding: 16px 14px 14px;
+    padding: 14px 12px 12px;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
     overflow: hidden;
 }
 
@@ -620,18 +621,21 @@ label {
 }
 
 .settings-email-sub {
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     color: var(--settings-label);
     text-align: center;
-    line-height: 1.4;
+    line-height: 1.3;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    width: 100%;
 }
 
 .settings-email-addr {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
     color: var(--settings-text);
     text-align: center;
-    letter-spacing: 0.2px;
+    letter-spacing: 0;
     word-break: break-all;
     overflow-wrap: break-word;
     max-width: 100%;
