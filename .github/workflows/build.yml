@@ -39,14 +39,15 @@ jobs:
       - name: Sign App
         uses: r0adkll/sign-android-release@v1
         id: sign_app
+        # with: 내부가 아닌 env: 블록에 작성해야 합니다.
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"
         with:
           releaseDirectory: android/app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE }}
           alias: ${{ secrets.KEY_ALIAS }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
-          # 서버에 설치된 최신 빌드 도구 버전을 사용하여 경로 오류를 방지합니다.
-          buildToolsVersion: "34.0.0"
 
       - name: Upload Signed APK
         uses: actions/upload-artifact@v4
