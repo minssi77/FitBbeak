@@ -1,85 +1,46 @@
-name: Build and Release
+name: Build and Sign FitBbeak
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
-    inputs:
-      version:
-        description: '릴리즈 버전 (예: v1.0.0)'
-        required: true
-        default: 'v1.0.0'
-
-permissions:
-  contents: write
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: macos-latest
     steps:
-    - name: 1. 코드 가져오기 (Checkout)
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: '61b2acb'
 
-    - name: 2. Node.js 설치 및 웹 소스 동기화
-      uses: actions/setup-node@v4
-      with:
-        node-version: '24'
-    - run: |
-        npm install
-        mkdir -p www
-        cp *.html *.js *.css www/ 2>/dev/null || :
-        npx cap sync android
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21' # 17에서 21로 수정하여 에러 해결
+          distribution: 'temurin'
 
-    - name: 3. Java 21 환경 세팅
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'zulu'
-        java-version: '21'
+      - name: Install Dependencies
+        run: |
+          npm install
+          npx cap sync android
 
-    - name: 4. APK (Release) 빌드
-      run: |
-        cd android
-        chmod +x gradlew
-        ./gradlew assembleRelease
+      - name: Build Android Release
+        run: |
+          cd android
+          ./gradlew assembleRelease bundleRelease
 
-    - name: 5. AAB (Release Bundle) 빌드
-      run: |
-        cd android
-        ./gradlew bundleRelease
+      - name: Sign App
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+          releaseDirectory: android/app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
 
-    - name: 6. GitHub Release 생성 및 파일 업로드
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: ${{ github.event.inputs.version || format('v1.0.{0}', github.run_number) }}
-        name: "FitBbeak ${{ github.event.inputs.version || format('v1.0.{0}', github.run_number) }}"
-        body: |
-          ## 핏삑 FitBbeak ${{ github.event.inputs.version || format('v1.0.{0}', github.run_number) }}
-
-          ### 다운로드
-          - **APK** - Android에 직접 설치 (사이드로딩)
-          - **AAB** - Google Play 스토어 제출용
-
-          > APK 설치 시 기기 설정에서 '출처를 알 수 없는 앱 설치'를 허용해야 합니다.
-        files: |
-          android/app/build/outputs/apk/release/*.apk
-          android/app/build/outputs/bundle/release/*.aab
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: 7. APK 업로드 (Artifact)
-      uses: actions/upload-artifact@v4
-      with:
-        name: FitBbeak-APK
-        path: android/app/build/outputs/apk/release/*.apk
-
-    - name: 8. AAB 업로드 (Artifact)
-      uses: actions/upload-artifact@v4
-      with:
-        name: FitBbeak-AAB
-        path: android/app/build/outputs/bundle/release/*.aab
+      - name: Upload Signed APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: FitBbeak-Signed-APK
+          path: ${{ steps.sign_app.outputs.signedReleaseFile }}
