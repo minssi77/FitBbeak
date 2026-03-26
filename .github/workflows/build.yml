@@ -23,7 +23,7 @@ jobs:
       - name: Install Dependencies and Build Web
         run: |
           npm install
-          npm run build
+          npm run build # 이 명령어가 www 폴더를 생성합니다.
           npx cap sync android
 
       - name: Build Android Release
