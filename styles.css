@@ -568,10 +568,11 @@ label {
 
 .lang-btn.active,
 .lang-btn.active:hover,
-.dark-mode .lang-btn.active {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    border-color: transparent;
-    color: #fff;
+.dark-mode .lang-btn.active,
+.dark-mode .lang-btn.active:hover {
+    background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
+    border-color: transparent !important;
+    color: #fff !important;
     box-shadow: 0 2px 8px rgba(52, 152, 219, 0.35);
 }
 
