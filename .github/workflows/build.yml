@@ -45,6 +45,8 @@ jobs:
           alias: ${{ secrets.KEY_ALIAS }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
+          # 빌드 도구 버전을 명시적으로 지정하여 경로 오류를 해결합니다.
+          buildToolsVersion: 34.0.0
 
       - name: Upload Signed APK
         uses: actions/upload-artifact@v4
