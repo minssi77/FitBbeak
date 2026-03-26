@@ -1,12 +1,20 @@
-name: Build & Release FitBbeak
+name: Build and Release
 
 on:
+  push:
+    branches: [ main ]
   workflow_dispatch:
     inputs:
       version:
         description: '릴리즈 버전 (예: v1.0.0)'
         required: true
         default: 'v1.0.0'
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
@@ -46,10 +54,10 @@ jobs:
     - name: 6. GitHub Release 생성 및 파일 업로드
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: ${{ github.event.inputs.version }}
-        name: "FitBbeak ${{ github.event.inputs.version }}"
+        tag_name: ${{ github.event.inputs.version || format('v1.0.{0}', github.run_number) }}
+        name: "FitBbeak ${{ github.event.inputs.version || format('v1.0.{0}', github.run_number) }}"
         body: |
-          ## 핏삑 FitBbeak ${{ github.event.inputs.version }}
+          ## 핏삑 FitBbeak ${{ github.event.inputs.version || format('v1.0.{0}', github.run_number) }}
 
           ### 다운로드
           - **APK** - Android에 직접 설치 (사이드로딩)
