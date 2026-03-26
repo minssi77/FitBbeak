@@ -51,37 +51,45 @@
     };
 
     class FitBbeak_Picker {
-        constructor(a, b, c, d, e, f, g = true) {
-            this.id = a;
-            this.cnt = document.querySelector(`.number-control[data-target="${a}"] .wheel-picker`);
+        constructor(id, min, max, stp, val, upd, lp = true) {
+            this.id = id;
+            this.cnt = document.querySelector(`.number-control[data-target="${id}"] .wheel-picker`);
             this.scr = this.cnt.querySelector('.wheel-scroller');
             this.inp = this.cnt.querySelector('.wheel-input');
             this.vpt = this.cnt.querySelector('.wheel-viewport');
-            this.min = b; this.max = c; this.stp = d; this.val = e; this.upd = f; this.lp = g; this.cc = 5;
-            this.ih = 30; this.its = []; this.sy = 0; this.ty = 0; this.sty = 0; this.to = null;
-            this.vals = (this.id === 'interval') ? this._gv() : null;
+            this.min = min; this.max = max; this.stp = stp; this.val = val; this.upd = upd; this.lp = lp; 
+            this.cc = 5; this.ih = 30; this.its = []; this.ty = 0; this.sty = 0; this.to = null;
+            this.vals = (id === 'interval') ? this._gv() : this._gd();
             this._i();
         }
         _i() {
             this._g(); this._e();
             if (window.ResizeObserver) {
-                const ro = new ResizeObserver(() => {
-                    this.rn();
-                });
-                ro.observe(this.cnt);
+                new ResizeObserver(() => this.rn()).observe(this.cnt);
             } else {
                 window.addEventListener('resize', () => {
                     clearTimeout(this.to);
                     this.to = setTimeout(() => this.rn(), 100);
                 });
             }
-            setTimeout(() => this.rn(), 50);
+            requestAnimationFrame(() => this.rn());
+        }
+        _gd() {
+            let v = [];
+            for (let i = this.min; i <= this.max; i = parseFloat((i + this.stp).toFixed(2))) v.push(i);
+            return v;
+        }
+        _gv() {
+            let v = [];
+            for (let i = 0.1; i <= 0.8; i = parseFloat((i + 0.1).toFixed(2))) v.push(i);
+            for (let i = 0.81; i <= 1.49; i = parseFloat((i + 0.01).toFixed(2))) v.push(i);
+            for (let i = 1.5; i <= 2.5; i = parseFloat((i + 0.1).toFixed(2))) v.push(i);
+            for (let i = 3.0; i <= 5.0; i = parseFloat((i + 0.5).toFixed(2))) v.push(i);
+            return v;
         }
         _g() {
             this.scr.innerHTML = ''; this.its = [];
-            let vs = this.vals;
-            if (!vs) { vs = []; for (let v = this.min; v <= this.max; v = parseFloat((v + this.stp).toFixed(2))) vs.push(v); }
-            const r_v = this.lp ? [...vs.slice(-this.cc), ...vs, ...vs.slice(0, this.cc)] : vs;
+            const r_v = this.lp ? [...this.vals.slice(-this.cc), ...this.vals, ...this.vals.slice(0, this.cc)] : this.vals;
             r_v.forEach(v => {
                 const i = document.createElement('div');
                 i.className = 'wheel-item';
@@ -97,37 +105,24 @@
                 const ih = parseFloat(window.getComputedStyle(this.its[0]).height);
                 if (ih > 0) this.ih = ih;
             }
-            const co = (h / 2) - (this.ih / 2);
-            this.ty = co - (this._gi(this.val) * this.ih);
+            this.ty = (h / 2) - (this.ih / 2) - (this._gi(this.val) * this.ih);
             this.scr.style.transform = `translateY(${this.ty}px)`;
             this._us();
         }
         _gi(v) {
-            const vs = this.vals || (() => { let t = []; for (let i = this.min; i <= this.max; i = parseFloat((i + this.stp).toFixed(2))) t.push(i); return t; })();
-            const bi = vs.indexOf(v);
+            const bi = this.vals.indexOf(v);
             return this.lp ? bi + this.cc : bi;
-        }
-        _gv() {
-            let v = [];
-            for (let i = 0.1; i <= 0.8; i = parseFloat((i + 0.1).toFixed(2))) v.push(i);
-            for (let i = 0.81; i <= 1.49; i = parseFloat((i + 0.01).toFixed(2))) v.push(i);
-            for (let i = 1.5; i <= 2.5; i = parseFloat((i + 0.1).toFixed(2))) v.push(i);
-            for (let i = 3.0; i <= 5.0; i = parseFloat((i + 0.5).toFixed(2))) v.push(i);
-            return v;
         }
         _us() {
             const co = (this.cnt.getBoundingClientRect().height / 2) - (this.ih / 2);
             const rs = -(this.ty - co);
             this.its.forEach((i, idx) => {
-                const ip = idx * this.ih;
-                const d = Math.abs(rs - ip);
+                const ip = idx * this.ih, d = Math.abs(rs - ip);
                 i.classList.remove('active', 'nearby', 'far');
                 if (d < this.ih * 0.4) i.classList.add('active');
                 else if (d < this.ih * 1.2) i.classList.add('nearby');
                 else i.classList.add('far');
-                const rot = (ip - rs) / (this.ih * 1.1) * 65;
-                const s = 1 - (d / (this.ih * 4));
-                const z = (d < this.ih * 0.4) ? this.ih * 0.5 : 0;
+                const rot = (ip - rs) / (this.ih * 1.1) * 65, s = 1 - (d / (this.ih * 4)), z = (d < this.ih * 0.4) ? this.ih * 0.5 : 0;
                 i.style.transform = `rotateX(${rot}deg) scale(${s}) translateZ(${z}px)`;
                 i.style.opacity = Math.max(0.1, 1 - (d / (this.ih * 2)));
             });
@@ -135,14 +130,9 @@
         _st(y) {
             this.ty = y;
             if (this.lp) {
-                const oc = this.its.length - (2 * this.cc);
-                const th = oc * this.ih;
-                const h = this.cnt.getBoundingClientRect().height;
-                const co = (h / 2) - (this.ih / 2);
-                const mb = co - (this.its.length - this.cc) * this.ih;
-                const max_b = co - (this.cc - 1) * this.ih;
-                if (this.ty < mb) this.ty += th;
-                if (this.ty > max_b) this.ty -= th;
+                const th = (this.its.length - (2 * this.cc)) * this.ih, co = (this.cnt.getBoundingClientRect().height / 2) - (this.ih / 2);
+                const mb = co - (this.its.length - this.cc) * this.ih, max_b = co - (this.cc - 1) * this.ih;
+                if (this.ty < mb) this.ty += th; if (this.ty > max_b) this.ty -= th;
             }
             this.scr.style.transform = `translateY(${this.ty}px)`;
             this._us();
@@ -153,9 +143,9 @@
             this.rn();
         }
         _e() {
-            let id = false;
-            const os = (y) => { id = true; this.sy = y; this.sty = this.ty; this.scr.style.transition = 'none'; this.vpt.style.cursor = 'grabbing'; };
-            const om = (y) => { if (!id) return; const dy = y - this.sy; this._st(this.sty + dy); };
+            let id = false, sy = 0;
+            const os = (y) => { id = true; sy = y; this.sty = this.ty; this.scr.style.transition = 'none'; this.vpt.style.cursor = 'grabbing'; };
+            const om = (y) => { if (!id) return; this._st(this.sty + (y - sy)); };
             const oe = () => { if (!id) return; id = false; this.vpt.style.cursor = 'ns-resize'; this.sn(); };
             this.vpt.addEventListener('mousedown', e => os(e.pageY));
             window.addEventListener('mousemove', e => om(e.pageY));
@@ -172,20 +162,15 @@
             this.inp.addEventListener('keypress', e => { if (e.key === 'Enter') this.inp.blur(); });
         }
         sn() {
-            const co = (this.cnt.getBoundingClientRect().height / 2) - (this.ih / 2);
-            const idx = Math.max(0, Math.min(this.its.length - 1, Math.round((co - this.ty) / this.ih)));
+            const idx = Math.max(0, Math.min(this.its.length - 1, Math.round(((this.cnt.getBoundingClientRect().height / 2) - (this.ih / 2) - this.ty) / this.ih)));
             this.set(parseFloat(this.its[idx].dataset.value), true);
-        }
-        _gn(r) {
-            const vs = this.vals || (() => { let t = []; for (let i = this.min; i <= this.max; i = parseFloat((i + this.stp).toFixed(2))) t.push(i); return t; })();
-            if (vs.length === 0) return r;
-            return vs.reduce((p, c) => Math.abs(c - r) < Math.abs(p - r) ? c : p);
         }
         set(v, a = true) {
             v = parseFloat(v); if (isNaN(v)) v = this.min;
             if (this.lp) { if (v > this.max) v = this.min; else if (v < this.min) v = this.max; }
             else v = Math.max(this.min, Math.min(this.max, v));
-            v = this._gn(v); this.val = v; this.sv(v, a);
+            v = this.vals.reduce((p, c) => Math.abs(c - v) < Math.abs(p - v) ? c : p);
+            this.val = v; this.sv(v, a);
             if (this.upd) this.upd(v);
         }
     }
@@ -218,7 +203,7 @@
     let _0x_pks = {};
     function _0x_ip() {
         _0x_pks.readyTime = new FitBbeak_Picker('readyTime', 1, 9, 1, NUREUM_state.rt, (v) => { NUREUM_state.rt = v; localStorage.setItem('fb_rt', v); }, true);
-        _0x_pks.interval = new FitBbeak_Picker('interval', 0.1, 5.0, 0.1, NUREUM_state.i, (v) => { NUREUM_state.i = v; localStorage.setItem('fb_i', v); if (NUREUM_state.r && !NUREUM_state.p) _0x_rw(); }, true, 10);
+        _0x_pks.interval = new FitBbeak_Picker('interval', 0.1, 5.0, 0.1, NUREUM_state.i, (v) => { NUREUM_state.i = v; localStorage.setItem('fb_i', v); if (NUREUM_state.r && !NUREUM_state.p) _0x_rw(); }, true);
         _0x_pks.beepsPerRep = new FitBbeak_Picker('beepsPerRep', 1, 19, 1, NUREUM_state.b, (v) => { NUREUM_state.b = v; localStorage.setItem('fb_b', v); }, true);
         _0x_pks.maxReps = new FitBbeak_Picker('maxReps', 1, 199, 1, NUREUM_state.m, (v) => { NUREUM_state.m = v; localStorage.setItem('fb_m', v); }, true);
     }
@@ -254,8 +239,6 @@
         document.getElementById('unit-ready').innerText = d.unitSec; document.getElementById('unit-interval').innerText = d.unitSec;
         document.getElementById('unit-beeps').innerText = d.unitCount; document.getElementById('unit-goal').innerText = d.unitReps;
         _0x_els.b.className = NUREUM_state.t === 'dark' ? 'dark-mode' : '';
-        
-        // Sync Iframe
         const ifr = document.querySelector('iframe');
         if (ifr && ifr.contentWindow) {
             ifr.contentWindow.postMessage({ type: 'I18N_UPDATE', content: d }, '*');
@@ -271,7 +254,7 @@
     function _0x_av(i, d) {
         const p = _0x_pks[i]; let v = p.val, s = p.stp;
         if (i === 'interval') { if (d === 1) s = (v < 0.795) ? 0.1 : (v < 1.495) ? 0.01 : (v < 2.495) ? 0.1 : 0.5; else s = (v <= 0.805) ? 0.1 : (v <= 1.505) ? 0.01 : (v <= 2.505) ? 0.1 : 0.5; }
-        v = parseFloat((v + (s * d)).toFixed(i === 'interval' ? 2 : 0)); p.set(v);
+        p.set(parseFloat((v + (s * d)).toFixed(i === 'interval' ? 2 : 0)));
     }
 
     window.FitBbeak_startWorkout = function() {
@@ -293,8 +276,8 @@
         NUREUM_state.sk = 'statusWorkout'; _0x_els.c.innerText = "0"; _0x_sp(0);
         NUREUM_state.tm = setInterval(() => {
             if (NUREUM_state.p) return; NUREUM_state.cb++;
-            const il = NUREUM_state.cb >= NUREUM_state.b; _0x_sp((NUREUM_state.cb / NUREUM_state.b) * 100);
-            if (il) {
+            _0x_sp((NUREUM_state.cb / NUREUM_state.b) * 100);
+            if (NUREUM_state.cb >= NUREUM_state.b) {
                 NUREUM_state.cc++; NUREUM_state.cb = 0; _0x_els.c.innerText = NUREUM_state.cc; _0x_tb(true);
                 _0x_els.c.style.transform = "scale(1.2)"; setTimeout(() => _0x_els.c.style.transform = "scale(1)", 100);
                 if (NUREUM_state.cc >= NUREUM_state.m) _0x_fw();
@@ -316,63 +299,33 @@
 
     function _0x_fw() { NUREUM_stopWorkout(); NUREUM_state.sk = 'statusFinished'; _0x_stb(); }
 
-    document.addEventListener('click', (e) => {
-        const sm = document.getElementById('settings-menu');
-        const stBtn = document.getElementById('settings-toggle');
-        if (sm && !sm.contains(e.target) && stBtn && !stBtn.contains(e.target)) { sm.classList.add('hidden'); }
-    });
-    document.querySelectorAll('.btn-adjust').forEach(b => { b.addEventListener('click', () => { _0x_av(b.dataset.target, parseInt(b.dataset.dir)); }); });
-    _0x_els.sb.addEventListener('click', FitBbeak_startWorkout);
-    _0x_els.pb.addEventListener('click', FitBbeak_pauseWorkout);
-    _0x_els.stb.addEventListener('click', NUREUM_stopWorkout);
-
-    // Settings menu toggle
-    const _0x_settingsToggle = document.getElementById('settings-toggle');
-    const _0x_settingsMenu = document.getElementById('settings-menu');
-    if (_0x_settingsToggle && _0x_settingsMenu) {
-        _0x_settingsToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const hide = _0x_settingsMenu.classList.toggle('hidden');
-            if (!hide) {
-                Object.values(_0x_pks).forEach(p => p.rn());
-            }
-        });
-    }
-
-    // Settings menu: lang buttons
-    function _0x_smUpdateLangBtns() {
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.lang === NUREUM_state.l);
-        });
-    }
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            NUREUM_state.l = btn.dataset.lang;
-            localStorage.setItem('fb_l', NUREUM_state.l);
-            _0x_ui();
-            _0x_smUpdateLangBtns();
-        });
-    });
-
-    // Settings menu: theme button
-    const _0x_stThemeBtn = document.getElementById('settings-theme-btn');
-    if (_0x_stThemeBtn) {
-        _0x_stThemeBtn.addEventListener('click', (e) => { e.stopPropagation(); NUREUM_toggleTheme(); });
-    }
-
-    // Iframe communication
-    window.addEventListener('message', (e) => {
-        if (e.data.type === 'READY') _0x_ui();
-    });
-
-    _0x_ip(); _0x_ui(); _0x_sp(0);
-    _0x_smUpdateLangBtns();
-
     window.FitBbeak_sendEmail = function() {
-        const d = FitBbeak_i18n[NUREUM_state.l];
-        const e = "ButtonNureum@gmail.com", s = encodeURIComponent(d.emailSubject), b = encodeURIComponent(d.emailBody), u = `mailto:${e}?subject=${s}&body=${b}`;
+        const d = FitBbeak_i18n[NUREUM_state.l], e = "ButtonNureum@gmail.com", s = encodeURIComponent(d.emailSubject), b = encodeURIComponent(d.emailBody), u = `mailto:${e}?subject=${s}&body=${b}`;
         const isApp = window.location.protocol === 'capacitor:' || (window.location.protocol === 'http:' && window.Capacitor);
         if (isApp) window.open(u, '_system'); else window.location.href = u;
     };
+
+    document.addEventListener('click', (e) => {
+        const sm = document.getElementById('settings-menu'), st = document.getElementById('settings-toggle');
+        if (sm && !sm.contains(e.target) && st && !st.contains(e.target)) sm.classList.add('hidden');
+    });
+    document.querySelectorAll('.btn-adjust').forEach(b => b.addEventListener('click', () => _0x_av(b.dataset.target, parseInt(b.dataset.dir))));
+    _0x_els.sb.addEventListener('click', FitBbeak_startWorkout);
+    _0x_els.pb.addEventListener('click', FitBbeak_pauseWorkout);
+    _0x_els.stb.addEventListener('click', NUREUM_stopWorkout);
+    const _t = document.getElementById('settings-toggle'), _m = document.getElementById('settings-menu');
+    if (_t && _m) _t.addEventListener('click', (e) => { e.stopPropagation(); if (!_m.classList.toggle('hidden')) Object.values(_0x_pks).forEach(p => p.rn()); });
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', (e) => {
+        e.stopPropagation(); NUREUM_state.l = btn.dataset.lang; localStorage.setItem('fb_l', NUREUM_state.l); _0x_ui();
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === NUREUM_state.l));
+    }));
+    const _th = document.getElementById('settings-theme-btn');
+    if (_th) _th.addEventListener('click', (e) => { e.stopPropagation(); NUREUM_toggleTheme(); });
+    const _em = document.getElementById('settings-email-footer');
+    if (_em) _em.addEventListener('click', (e) => { e.stopPropagation(); FitBbeak_sendEmail(); });
+    window.addEventListener('message', (e) => { if (e.data.type === 'READY') _0x_ui(); });
+
+    _0x_ip(); _0x_ui(); _0x_sp(0);
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === NUREUM_state.l));
 })();
+
