@@ -58,12 +58,11 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%; /* 화면 높이를 100%로 고정 */
+    height: 100dvh; /* 모바일 브라우저 주소창 대응 */
     width: 100vw;
-    overflow: hidden; /* 전체 페이지 스크롤을 방지합니다. */
-    /* 안전 영역만큼 여백을 추가합니다. */
-    padding-top: var(--safe-area-inset-top);
-    padding-bottom: var(--safe-area-inset-bottom);
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 /* On wide screens, show a subtle grid pattern behind the card */
@@ -83,7 +82,7 @@ html, body {
 /* Mobile (<500px): fill the entire screen with no border-radius */
 .fitbbeak-container {
     width: 100%;
-    max-width: 393px;          /* iOS 393pt baseline */
+    max-width: 393px;
     height: 100dvh;
     display: flex;
     flex-direction: column;
@@ -94,8 +93,11 @@ html, body {
     border: 1px solid var(--border-color);
     border-radius: 0;
     padding: clamp(15px, 4vmin, 28px);
+    padding-top: calc(clamp(15px, 4vmin, 28px) + var(--safe-area-inset-top));
+    padding-bottom: calc(clamp(15px, 4vmin, 28px) + var(--safe-area-inset-bottom));
     box-shadow: none;
     margin: 0;
+    overflow: hidden;
 }
 
 /* Tablet / PC: show as a floating phone card */
