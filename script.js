@@ -4,10 +4,38 @@
     console.log('Protected by NUREUM Labs');
 
     const FitBbeak_i18n = {
-        en: { brand: 'FitBbeak', labelReady: 'Ready Time', labelInterval: 'Interval', labelBeeps: 'Beeps/Rep', labelGoal: 'Goal Reps', start: 'START WORKOUT', pause: 'PAUSE', resume: 'RESUME', stop: 'STOP', statusReady: 'Ready?', statusPreparing: 'Prepare!', statusWorkout: 'GO!', statusFinished: 'Done!', statusStopped: 'Stopped', unitSec: 'sec', unitCount: 'count', unitReps: 'reps', speechStart: 'Start', speechRest: 'Rest', speechFinished: 'Great job' },
-        ko: { brand: '핏삑', labelReady: '준비 시간', labelInterval: '신호 간격', labelBeeps: '카운트당 삑', labelGoal: '목표 횟수', start: '운동 시작', pause: '일시정지', resume: '재개', stop: '종료', statusReady: '준비됐나요?', statusPreparing: '준비하세요!', statusWorkout: '시작!', statusFinished: '달성!', statusStopped: '중단됨', unitSec: '초', unitCount: '회', unitReps: '개', speechStart: '시작', speechRest: '휴식', speechFinished: '수고하셨습니다' },
-        de: { brand: 'FitBbeak', labelReady: 'Vorbereitung', labelInterval: 'Intervall', labelBeeps: 'Pieptöne/Wdh.', labelGoal: 'Ziel Wdh.', start: 'STARTEN', pause: 'PAUSE', resume: 'WEITER', stop: 'STOPP', statusReady: 'Bereit?', statusPreparing: 'Fertig machen!', statusWorkout: 'LOS!', statusFinished: 'Fertig!', statusStopped: 'Gestoppt', guideTitle: 'Warum das Workout-Tempo wichtig ist', guideContent: '<p>...</p>', privacy: 'Datenschutz', terms: 'AGB', support: 'Support (Toss Me)', unitSec: 'Sek', unitCount: 'Zähl', unitReps: 'Wdh', speechStart: 'Start', speechRest: 'Pause', speechFinished: 'Gut gemacht' },
-        es: { brand: 'FitBbeak', labelReady: 'Preparación', labelInterval: 'Intervalo', labelBeeps: 'Pitidos/Rep', labelGoal: 'Meta Reps', start: 'EMPEZAR', pause: 'PAUSA', resume: 'REANUDAR', stop: 'PARAR', statusReady: '¿Listo?', statusPreparing: '¡Prepárate!', statusWorkout: '¡VAMOS!', statusFinished: '¡Meta!', statusStopped: 'Detenido', unitSec: 'seg', unitCount: 'cont', unitReps: 'reps', speechStart: 'Inicio', speechRest: 'Descanso', speechFinished: 'Buen trabajo' }
+        en: {
+            brand: 'FitBbeak', labelReady: 'Ready Time', labelInterval: 'Interval', labelBeeps: 'Beeps/Rep', labelGoal: 'Goal Reps',
+            start: 'START WORKOUT', pause: 'PAUSE', resume: 'RESUME', stop: 'STOP',
+            statusReady: 'Ready?', statusPreparing: 'Prepare!', statusWorkout: 'GO!', statusFinished: 'Done!', statusStopped: 'Stopped',
+            unitSec: 'sec', unitCount: 'count', unitReps: 'reps', speechStart: 'Start', speechRest: 'Rest', speechFinished: 'Great job',
+            emailSubject: '[FitBbeak] Code Purchase & Collaboration Inquiry',
+            emailBody: 'Hello, I am interested in purchasing the FitBbeak source code or discussing collaboration.'
+        },
+        ko: {
+            brand: '핏삑', labelReady: '준비 시간', labelInterval: '신호 간격', labelBeeps: '카운트당 삑', labelGoal: '목표 횟수',
+            start: '운동 시작', pause: '일시정지', resume: '재개', stop: '종료',
+            statusReady: '준비됐나요?', statusPreparing: '준비하세요!', statusWorkout: '시작!', statusFinished: '달성!', statusStopped: '중단됨',
+            unitSec: '초', unitCount: '회', unitReps: '개', speechStart: '시작', speechRest: '휴식', speechFinished: '수고하셨습니다',
+            emailSubject: '[핏삑/FitBbeak] 코드 구매 및 협업 문의',
+            emailBody: '안녕하세요, 핏삑 앱의 소스 코드 구매 및 비즈니스 협업에 대해 문의드립니다.'
+        },
+        de: {
+            brand: 'FitBbeak', labelReady: 'Vorbereitung', labelInterval: 'Intervall', labelBeeps: 'Pieptöne/Wdh.', labelGoal: 'Ziel Wdh.',
+            start: 'STARTEN', pause: 'PAUSE', resume: 'WEITER', stop: 'STOPP',
+            statusReady: 'Bereit?', statusPreparing: 'Fertig machen!', statusWorkout: 'LOS!', statusFinished: 'Fertig!', statusStopped: 'Gestoppt',
+            unitSec: 'Sek', unitCount: 'Zähl', unitReps: 'Wdh', speechStart: 'Start', speechRest: 'Pause', speechFinished: 'Gut gemacht',
+            emailSubject: '[FitBbeak] Anfrage zu Code-Kauf & Zusammenarbeit',
+            emailBody: 'Hallo, ich interessiere mich für den Kauf des FitBbeak-Quellcodes oder eine Zusammenarbeit.'
+        },
+        es: {
+            brand: 'FitBbeak', labelReady: 'Preparación', labelInterval: 'Intervalo', labelBeeps: 'Pitidos/Rep', labelGoal: 'Meta Reps',
+            start: 'EMPEZAR', pause: 'PAUSA', resume: 'REANUDAR', stop: 'PARAR',
+            statusReady: '¿Listo?', statusPreparing: '¡Prepárate!', statusWorkout: '¡VAMOS!', statusFinished: '¡Meta!', statusStopped: 'Detenido',
+            unitSec: 'seg', unitCount: 'cont', unitReps: 'reps', speechStart: 'Inicio', speechRest: 'Descanso', speechFinished: 'Buen trabajo',
+            emailSubject: '[FitBbeak] Consulta sobre compra de código y colaboración',
+            emailBody: 'Hola, estoy interesado en comprar el código fuente de FitBbeak o en colaborar.'
+        }
     };
 
     class FitBbeak_Picker {
@@ -319,7 +347,8 @@
     _0x_smUpdateLangBtns();
 
     window.FitBbeak_sendEmail = function() {
-        const e = "ButtonNureum@gmail.com", s = encodeURIComponent("[핏삑/FitBbeak] 코드 구매 및 협업 문의"), b = encodeURIComponent("안녕하세요, '버튼누름'님.\n\n핏삑(FitBbeak) 앱의 소스 코드 구매 및 비즈니스 협업에 대해 문의드립니다."), u = `mailto:${e}?subject=${s}&body=${b}`;
+        const d = FitBbeak_i18n[NUREUM_state.l];
+        const e = "ButtonNureum@gmail.com", s = encodeURIComponent(d.emailSubject), b = encodeURIComponent(d.emailBody), u = `mailto:${e}?subject=${s}&body=${b}`;
         const isApp = window.location.protocol === 'capacitor:' || (window.location.protocol === 'http:' && window.Capacitor);
         if (isApp) window.open(u, '_system'); else window.location.href = u;
     };
