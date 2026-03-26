@@ -51,19 +51,18 @@
         }
         _i() {
             this._g(); this._e();
-            setTimeout(() => {
-                if (this.its.length > 0) {
-                    const h = parseFloat(window.getComputedStyle(this.its[0]).height);
-                    this.ih = h > 0 ? h : 30;
-                }
-                this.sv(this.val, false);
-            }, 50);
-            window.addEventListener('resize', () => {
-                clearTimeout(this.to);
-                this.to = setTimeout(() => {
+            if (window.ResizeObserver) {
+                const ro = new ResizeObserver(() => {
                     this.rn();
-                }, 100);
-            });
+                });
+                ro.observe(this.cnt);
+            } else {
+                window.addEventListener('resize', () => {
+                    clearTimeout(this.to);
+                    this.to = setTimeout(() => this.rn(), 100);
+                });
+            }
+            setTimeout(() => this.rn(), 50);
         }
         _g() {
             this.scr.innerHTML = ''; this.its = [];
@@ -117,11 +116,11 @@
                 if (d < this.ih * 0.4) i.classList.add('active');
                 else if (d < this.ih * 1.2) i.classList.add('nearby');
                 else i.classList.add('far');
-                const rot = (ip - rs) / 35 * 65;
-                const s = 1 - (d / 120);
-                const z = (d < 12) ? 15 : 0;
+                const rot = (ip - rs) / (this.ih * 1.1) * 65;
+                const s = 1 - (d / (this.ih * 4));
+                const z = (d < this.ih * 0.4) ? this.ih * 0.5 : 0;
                 i.style.transform = `rotateX(${rot}deg) scale(${s}) translateZ(${z}px)`;
-                i.style.opacity = Math.max(0.1, 1 - (d / 60));
+                i.style.opacity = Math.max(0.1, 1 - (d / (this.ih * 2)));
             });
         }
         _st(y) {
@@ -129,7 +128,8 @@
             if (this.lp) {
                 const oc = this.its.length - (2 * this.cc);
                 const th = oc * this.ih;
-                const co = (this.cnt.getBoundingClientRect().height / 2) - (this.ih / 2);
+                const h = this.cnt.getBoundingClientRect().height;
+                const co = (h / 2) - (this.ih / 2);
                 const mb = co - (this.its.length - this.cc) * this.ih;
                 const max_b = co - (this.cc - 1) * this.ih;
                 if (this.ty < mb) this.ty += th;
