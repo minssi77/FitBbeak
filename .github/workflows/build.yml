@@ -7,7 +7,8 @@ on:
 jobs:
   build:
     runs-on: macos-latest
-    # env 설정을 제거하여 표준 환경에서 실행합니다.
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -17,14 +18,18 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          # 캐시 설정을 추가하여 빌드 속도와 안정성을 높입니다.
-          cache: 'gradle'
 
-      - name: Install Dependencies and Build Web
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Web Assets
         run: |
-          npm install
-          npm run build # 이 명령어가 www 폴더를 생성합니다.
-          npx cap sync android
+          npm run build
+          # 빌드 후 www 폴더가 생성되었는지 터미널에서 확인하는 로직 추가
+          ls -R ./www/index.html || echo "Error: index.html not found in www"
+
+      - name: Capacitor Sync
+        run: npx cap sync android
 
       - name: Build Android Release
         run: |
