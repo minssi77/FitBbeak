@@ -46,6 +46,7 @@ body.dark-mode {
     padding: 0;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 /* Mobile-first: full height, centered, min scrolling */
@@ -82,6 +83,11 @@ html, body {
 
 /* Mobile (<500px): fill the entire screen with no border-radius */
 .fitbbeak-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     width: 100%;
     height: 100%;
     display: flex;
@@ -98,15 +104,20 @@ html, body {
     box-shadow: none;
     margin: 0;
     overflow: hidden;
+    z-index: 10;
 }
 
 /* Tablet / PC: show as a floating phone card */
 @media (min-width: 500px) {
     .fitbbeak-container {
-        height: min(852px, 96dvh); /* iOS 852pt baseline */
+        position: relative;
+        height: min(852px, 96dvh);
+        width: 100%;
+        max-width: 393px;
         border-radius: 40px;
         box-shadow: 0 24px 80px rgba(0,0,0,0.18), 0 0 0 1px var(--border-color);
         margin: auto;
+        left: unset; right: unset; top: unset; bottom: unset;
     }
 }
 
@@ -464,8 +475,8 @@ label {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100dvh;
+    right: 0;
+    bottom: 0;
     background: var(--primary);
     opacity: 0;
     pointer-events: none;
