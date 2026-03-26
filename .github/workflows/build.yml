@@ -8,13 +8,11 @@ jobs:
   build:
     runs-on: macos-latest
     env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Node.js 경고 제거
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          ref: '61b2acb'
-          fetch-depth: 0
+        # ref 부분을 과감히 삭제하여 현재 push된 최신 코드를 사용합니다.
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
