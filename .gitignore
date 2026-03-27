@@ -10,8 +10,8 @@ build/
 /tmp
 
 # Keystores and private keys
-*.jks
 *.keystore
 *.p12
 *.pem
 *.key
+*.jks
