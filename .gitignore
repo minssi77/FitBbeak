@@ -8,3 +8,10 @@ build/
 /android/.gradle
 /android/local.properties
 /tmp
+
+# Keystores and private keys
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
