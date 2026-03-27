@@ -1,7 +1,7 @@
 {
   "appId": "com.fitbbeak.app",
   "appName": "FitBbeak",
-  "webDir": "dist",
+  "webDir": "www",
   "plugins": {
     "StatusBar": {
       "overlaysWebView": false,
