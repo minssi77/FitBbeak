@@ -5,6 +5,7 @@
  
     const IS_APP_REVIEW = false;
     const SUPPORT_URL_MOBILE = 'https://qr.kakaopay.com/FUoXQ67zk1f407013';
+    const SUPPORT_URL_KOFI = 'https://ko-fi.com/buttonnureum';
 
     const FitBbeak_i18n = {
         en: {
@@ -38,7 +39,7 @@
             emailBody: 'Hallo, ich interessiere mich für den Kauf des FitBbeak-Quellcodes oder eine Zusammenarbeit.',
             guideTitle: 'Warum das Workout-Tempo wichtig ist',
             guideContent: '<p>Ein gleichmäßiges Tempo bei Übungen wie Kniebeugen oder Liegestützen ist entscheidend, um das Muskelwachstum zu maximieren und das Verletzungsrisiko zu minimieren. <strong>FitBbeak</strong> hilft Ihnen, sich rein auf Ihre Bewegung zu konzentrieren, indem es präzise akustische Signale liefert.</p><p>Die Wissenschaft der "Zeit unter Spannung" (TUT) zeigt, dass kontrollierte Wiederholungen zu einer besseren neuromuskulären Anpassung führen. Mit <strong>FitBbeak</strong> können Sie Ihr ideales Intervall einstellen und sicherstellen, dass jede Wiederholung zählt.</p>',
-            privacy: 'Datenschutz', terms: 'AGB', support: 'Unterstützen'
+            privacy: 'Datenschutz', terms: 'AGB', support: 'Support'
         },
         es: {
             brand: 'FitBbeak', labelReady: 'Preparación', labelInterval: 'Intervalo', labelBeeps: 'Pitidos/Rep', labelGoal: 'Meta Reps',
@@ -49,7 +50,7 @@
             emailBody: 'Hola, estoy interesado en comprar el código fuente de FitBbeak o en colaborar.',
             guideTitle: '¿Por qué importa el ritmo del entrenamiento?',
             guideContent: '<p>Mantener un ritmo constante durante ejercicios como sentadillas y flexiones es crucial para maximizar el crecimiento muscular y minimizar el riesgo de lesiones. <strong>FitBbeak</strong> le ayuda a concentrarse puramente en su movimiento mediante señales auditivas precisas.</p><p>La ciencia del "Tiempo Bajo Tensión" (TUT) muestra que las repeticiones controladas conducen a una mejor adaptación neuromuscular. Al configurar su intervalo ideal con <strong>FitBbeak</strong>, puede asegurarse de que cada repetición cuente.</p>',
-            privacy: 'Privacidad', terms: 'Términos', support: 'Apoyar'
+            privacy: 'Privacidad', terms: 'Términos', support: 'Support'
         }
     };
 
@@ -334,12 +335,18 @@
     const _sl = document.getElementById('settings-support-link');
     if (_sl) _sl.addEventListener('click', (e) => {
         e.stopPropagation();
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.Capacitor && window.Capacitor.platform !== 'web');
-        if (isMobile) {
-            window.open(SUPPORT_URL_MOBILE, '_system');
+        const isKO = NUREUM_state.l === 'ko';
+        const isApp = window.location.protocol === 'capacitor:' || (window.location.protocol === 'http:' && window.Capacitor);
+        if (isKO) {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || isApp;
+            if (isMobile) {
+                window.open(SUPPORT_URL_MOBILE, '_system');
+            } else {
+                const modal = document.getElementById('qr-modal');
+                if (modal) modal.classList.remove('hidden');
+            }
         } else {
-            const modal = document.getElementById('qr-modal');
-            if (modal) modal.classList.remove('hidden');
+            if (isApp) window.open(SUPPORT_URL_KOFI, '_system'); else window.location.href = SUPPORT_URL_KOFI;
         }
     });
     const _qc = document.getElementById('qr-close'), _qm = document.getElementById('qr-modal');
