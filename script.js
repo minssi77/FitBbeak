@@ -4,7 +4,7 @@
     console.log('Protected by NUREUM Labs');
  
     const IS_APP_REVIEW = false;
-    const SUPPORT_URL = 'https://ko-fi.com/buttonnureum';
+    const SUPPORT_URL_MOBILE = 'https://qr.kakaopay.com/FUoXQ67zk1f407013';
 
     const FitBbeak_i18n = {
         en: {
@@ -332,7 +332,21 @@
     const _em = document.getElementById('settings-email-footer');
     if (_em) _em.addEventListener('click', (e) => { e.stopPropagation(); FitBbeak_sendEmail(); });
     const _sl = document.getElementById('settings-support-link');
-    if (_sl) _sl.addEventListener('click', (e) => { e.stopPropagation(); window.open(SUPPORT_URL, '_system'); });
+    if (_sl) _sl.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.Capacitor && window.Capacitor.platform !== 'web');
+        if (isMobile) {
+            window.open(SUPPORT_URL_MOBILE, '_system');
+        } else {
+            const modal = document.getElementById('qr-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+    });
+    const _qc = document.getElementById('qr-close'), _qm = document.getElementById('qr-modal');
+    if (_qc && _qm) {
+        _qc.addEventListener('click', () => _qm.classList.add('hidden'));
+        _qm.addEventListener('click', (e) => { if (e.target === _qm) _qm.classList.add('hidden'); });
+    }
     window.addEventListener('message', (e) => { if (e.data.type === 'READY') _0x_ui(); });
 
     _0x_ip(); _0x_ui(); _0x_sp(0);
