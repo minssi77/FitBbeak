@@ -2,6 +2,9 @@
 (function() {
     'use strict';
     console.log('Protected by NUREUM Labs');
+ 
+    const IS_APP_REVIEW = false;
+    const SUPPORT_URL = 'https://ko-fi.com/buttonnureum';
 
     const FitBbeak_i18n = {
         en: {
@@ -13,7 +16,7 @@
             emailBody: 'Hello, I am interested in purchasing the FitBbeak source code or discussing collaboration.',
             guideTitle: 'Why Workout Tempo Matters?',
             guideContent: '<p>Maintaining a consistent tempo during exercises like squats and push-ups is crucial for maximizing muscle growth and minimizing the risk of injury. <strong>FitBbeak</strong> helps you focus purely on your movement by providing precise auditory signals.</p><p>The science of "Time Under Tension" (TUT) shows that controlled repetitions lead to better neuromuscular adaptation. By setting your ideal interval with <strong>FitBbeak</strong>, you can ensure every rep counts.</p>',
-            privacy: 'Privacy Policy', terms: 'Terms of Service', support: 'Support (Toss Me)'
+            privacy: 'Privacy Policy', terms: 'Terms of Service', support: 'Support (Ko-fi)'
         },
         ko: {
             brand: '핏삑', labelReady: '준비 시간', labelInterval: '신호 간격', labelBeeps: '카운트당 삑', labelGoal: '목표 횟수',
@@ -24,7 +27,7 @@
             emailBody: '안녕하세요, 핏삑 앱의 소스 코드 구매 및 비즈니스 협업에 대해 문의드립니다.',
             guideTitle: '운동 템포가 왜 중요한가요?',
             guideContent: '<p>스쿼트나 푸쉬업 같은 운동을 할 때 일정한 템포를 유지하는 것은 근성장을 극대화하고 부상 위험을 최소화하는 데 매우 중요합니다. <strong>핏삑(FitBbeak)</strong>은 정밀한 청각 신호를 제공하여 오직 움직임에만 집중할 수 있도록 도와줍니다.</p><p>"지속형 긴장 시간"(TUT) 이론에 따르면, 통제된 반복 횟수는 더 나은 신경근 적응으로 이어집니다. <strong>핏삑</strong>으로 이상적인 간격을 설정하여 모든 반복이 효과를 발휘하도록 하세요.</p>',
-            privacy: '개인정보 처리방침', terms: '이용약관', support: '후원하기 (Toss)'
+            privacy: '개인정보 처리방침', terms: '이용약관', support: '후원하기 (Ko-fi)'
         },
         de: {
             brand: 'FitBbeak', labelReady: 'Vorbereitung', labelInterval: 'Intervall', labelBeeps: 'Pieptöne/Wdh.', labelGoal: 'Ziel Wdh.',
@@ -35,7 +38,7 @@
             emailBody: 'Hallo, ich interessiere mich für den Kauf des FitBbeak-Quellcodes oder eine Zusammenarbeit.',
             guideTitle: 'Warum das Workout-Tempo wichtig ist',
             guideContent: '<p>Ein gleichmäßiges Tempo bei Übungen wie Kniebeugen oder Liegestützen ist entscheidend, um das Muskelwachstum zu maximieren und das Verletzungsrisiko zu minimieren. <strong>FitBbeak</strong> hilft Ihnen, sich rein auf Ihre Bewegung zu konzentrieren, indem es präzise akustische Signale liefert.</p><p>Die Wissenschaft der "Zeit unter Spannung" (TUT) zeigt, dass kontrollierte Wiederholungen zu einer besseren neuromuskulären Anpassung führen. Mit <strong>FitBbeak</strong> können Sie Ihr ideales Intervall einstellen und sicherstellen, dass jede Wiederholung zählt.</p>',
-            privacy: 'Datenschutz', terms: 'AGB', support: 'Support (Toss Me)'
+            privacy: 'Datenschutz', terms: 'AGB', support: 'Support (Ko-fi)'
         },
         es: {
             brand: 'FitBbeak', labelReady: 'Preparación', labelInterval: 'Intervalo', labelBeeps: 'Pitidos/Rep', labelGoal: 'Meta Reps',
@@ -46,7 +49,7 @@
             emailBody: 'Hola, estoy interesado en comprar el código fuente de FitBbeak o en colaborar.',
             guideTitle: '¿Por qué importa el ritmo del entrenamiento?',
             guideContent: '<p>Mantener un ritmo constante durante ejercicios como sentadillas y flexiones es crucial para maximizar el crecimiento muscular y minimizar el riesgo de lesiones. <strong>FitBbeak</strong> le ayuda a concentrarse puramente en su movimiento mediante señales auditivas precisas.</p><p>La ciencia del "Tiempo Bajo Tensión" (TUT) muestra que las repeticiones controladas conducen a una mejor adaptación neuromuscular. Al configurar su intervalo ideal con <strong>FitBbeak</strong>, puede asegurarse de que cada repetición cuente.</p>',
-            privacy: 'Privacidad', terms: 'Términos', support: 'Soporte (Toss Me)'
+            privacy: 'Privacidad', terms: 'Términos', support: 'Soporte (Ko-fi)'
         }
     };
 
@@ -244,6 +247,11 @@
             ifr.contentWindow.postMessage({ type: 'I18N_UPDATE', content: d }, '*');
             ifr.contentWindow.postMessage({ type: 'THEME_UPDATE', isDark: NUREUM_state.t === 'dark' }, '*');
         }
+        const sl = document.getElementById('settings-support-link');
+        if (sl) {
+            sl.innerText = d.support;
+            sl.classList.toggle('hidden', IS_APP_REVIEW);
+        }
     }
 
     window.NUREUM_toggleTheme = function() {
@@ -323,6 +331,8 @@
     if (_th) _th.addEventListener('click', (e) => { e.stopPropagation(); NUREUM_toggleTheme(); });
     const _em = document.getElementById('settings-email-footer');
     if (_em) _em.addEventListener('click', (e) => { e.stopPropagation(); FitBbeak_sendEmail(); });
+    const _sl = document.getElementById('settings-support-link');
+    if (_sl) _sl.addEventListener('click', (e) => { e.stopPropagation(); window.open(SUPPORT_URL, '_system'); });
     window.addEventListener('message', (e) => { if (e.data.type === 'READY') _0x_ui(); });
 
     _0x_ip(); _0x_ui(); _0x_sp(0);

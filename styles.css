@@ -491,6 +491,38 @@ label {
 .settings-email-sub { font-size: 0.58rem; color: var(--settings-label); text-align: center; line-height: 1.4; word-break: keep-all; overflow-wrap: break-word; width: 100%; opacity: 0.85; }
 .settings-email-addr { font-size: 0.7rem; font-weight: 700; color: var(--settings-text); text-align: center; letter-spacing: 0; word-break: break-all; overflow-wrap: break-word; width: 100%; margin-top: 2px; }
 
+.settings-support {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #FFDD00, #F7D100);
+    color: #111;
+    border-radius: 12px;
+    padding: 10px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 5px;
+    box-shadow: 0 4px 12px rgba(255, 221, 0, 0.25);
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.settings-support:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 221, 0, 0.35);
+}
+
+.settings-support:active {
+    transform: translateY(0);
+}
+
+.dark-mode .settings-support {
+    background: linear-gradient(135deg, #FFDD00, #F7D100);
+    color: #000;
+}
+
 /* Tablet / PC: floating card layout */
 @media (min-width: 500px) {
     body {
